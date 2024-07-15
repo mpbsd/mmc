@@ -9,11 +9,13 @@ from unidecode import unidecode
 
 disciplinas = re.compile(r"DISCIPLINAS")
 campus = re.compile(r"CAMPUS (APARECIDA|COLEMAR|SAMAMBAIA)")
-horario = re.compile(r"([0-9]{1,3}[MTN][0-9]{2,4})")
-separador = re.compile(r"\s*-\s*")
+horario = re.compile(r"([0-9]{1,3}[MTN][0-9]{1,2})")
+com_separador = re.compile(r"\s*-\s*")
+sem_separador = re.compile(r"([A-Z])\s*([0-9]{1,3}[MTN][0-9]{1,2})")
 APARECIDA = re.compile(r"CAMPUS APARECIDA(.*)CAMPUS COLEMAR", re.S)
 COLEMAR = re.compile(r"CAMPUS COLEMAR(.*)CAMPUS SAMAMBAIA", re.S)
 SAMAMBAIA = re.compile(r"CAMPUS SAMAMBAIA(.*)", re.S)
+CAMPUS = re.compile(r"^CAMPUS (APARECIDA|COLEMAR|SAMAMBAIA)", re.M)
 
 
 def parsed_row(R):
@@ -44,8 +46,8 @@ def row_should_not_be_excluded(R):
 
 
 def parse_PDF(ano, semestre):
-    PDFfile = f"pdfs/{ano}-{semestre}.pdf"
-    CSVfile = f"brew/{ano}-{semestre}.csv"
+    PDFfile = f"pdfs/{ano}{semestre}.pdf"
+    CSVfile = f"brew/{ano}{semestre}.csv"
     if Path(PDFfile).is_file():
         stream = ""
         with pdfplumber.open(PDFfile) as PDF:
@@ -65,27 +67,43 @@ def parse_PDF(ano, semestre):
                             stream += C + "\n"
                         else:
                             stream += C + " "
-        stream = separador.sub(r";", stream)
-        aparecida = re.sub(
-            r"([0-9]{1,3}[MTN][0-9]{2,4})",
+        stream = com_separador.sub(r";", stream)
+        stream = sem_separador.sub(r"\1;\2", stream)
+        aparecida = horario.sub(
             r"\1;APARECIDA",
             APARECIDA.search(stream).group(0),
         )
-        colemar = re.sub(
-            r"([0-9]{1,3}[MTN][0-9]{2,4})",
+        colemar = horario.sub(
             r"\1;COLEMAR",
             COLEMAR.search(stream).group(0),
         )
-        samambaia = re.sub(
-            r"([0-9]{1,3}[MTN][0-9]{2,4})",
+        samambaia = horario.sub(
             r"\1;SAMAMBAIA",
             SAMAMBAIA.search(stream).group(0),
         )
+        stream = aparecida + colemar + samambaia
         with open(CSVfile, "w") as CSV:
-            print(aparecida + colemar + samambaia, file=CSV)
+            lines = [
+                x
+                for x in CAMPUS.split(stream)
+                if re.sub(r"\n", r"", x)
+                not in [
+                    "",
+                    "APARECIDA",
+                    "COLEMAR",
+                    "SAMAMBAIA",
+                    "CAMPUS APARECIDA",
+                    "CAMPUS COLEMAR",
+                    "CAMPUS SAMAMBAIA",
+                ]
+            ]
+            for line in lines:
+                print(line, file=CSV)
 
 
 def main():
+    parse_PDF("2022", "02")
+    parse_PDF("2023", "01")
     parse_PDF("2024", "01")
 
 

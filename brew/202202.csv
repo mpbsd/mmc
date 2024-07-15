@@ -1,0 +1,109 @@
+ALGEBRA LINEAR                         ; ENGENHARIA DE TRASPORTES ; 24M23  ; APARECIDA
+ALGEBRA LINEAR                         ; ENGENHARIA DE PRODUCAO   ; 24M45  ; APARECIDA
+ALGEBRA LINEAR                         ; ENG DE MATERIAIS         ; 24T23  ; APARECIDA
+CALCULO NUMERICO                       ; ENGENHARIA DE TRANSPORTE ; 24M45  ; APARECIDA
+CALCULO NUMERICO                       ; ENGENHARIA DE PRODUCAO   ; 24T23  ; APARECIDA
+PROBABILIDADE E ESTATISTICA A          ; ENGENHARIA DE MATERIAIS  ; 56T23  ; APARECIDA
+GEOMETRIA ANALITICA                    ; ENGENHARIA DE MATERIAIS  ; 24T23  ; APARECIDA
+INFERENCIA                             ; ENGENHARIA DE PRODUCAO   ; 24T45  ; APARECIDA
+CALCULO 1A                             ; ENGENHARIA DE MATERIAIS  ; 246T23 ; APARECIDA
+CALCULO 1A                             ; ENGENHARIA DE MATERIAIS  ; 246T45 ; APARECIDA
+PROBABILIDADE E ESTATISTICA A          ; ENGENHARIA DE MATERIAIS  ; 56T23  ; APARECIDA
+CALCULO 2A                             ; ENGENHARIA DE MATERIAIS  ; 246T23 ; APARECIDA
+CALCULO 2A                             ; ENGENHARIA DE MATERIAIS  ; 246T45 ; APARECIDA
+CALCULO 1 A                            ; ENGENHARIA ELETRICA      ; 246M12 ; COLEMAR
+CALCULO 1A                             ; ENGENHARIA DE COMPUTACAO ; 246M34 ; COLEMAR
+EDO                                    ; ENGENHARIA CIVIL         ; 24M12  ; COLEMAR
+EDO                                    ; ENGENHARIA ELETRICA      ; 24M34  ; COLEMAR
+EDO                                    ; ENGENHARIA DE COMPUTACAO ; 24M56  ; COLEMAR
+CALCULO 3 A                            ; ENGENHARIA ELETRICA      ; 24M12  ; COLEMAR
+CALCULO 3A                             ; ENGENHARIA DE COMPUTACAO ; 24M34  ; COLEMAR
+CALCULO NUMERICO                       ; ENGENHARIA DA COMPUTACAO ; 35M12  ; COLEMAR
+CALCULO NUMERICO                       ; ENGENHARIA ELETRICA      ; 35M34  ; COLEMAR
+GEOMETRIA ANALITICA                    ; ENGENHARIA ELETRICA      ; 35M12  ; COLEMAR
+MATEMATICA DISCRETA                    ; ENGENHARIA DA COMPUTACAO ; 24M12  ; COLEMAR
+PROBABILIDADE E ESTATISTICA A          ; ENGENHARIA CIVIL         ; 24M34  ; COLEMAR
+CALCULO 2A                             ; ENGENHARIA CIVIL         ; 246M12 ; COLEMAR
+ALGEBRA LINEAR                         ; ENGENHARIA CIVIL         ; 24M56  ; COLEMAR
+CALCULO 2A                             ; ENGENHARIA ELETRICA      ; 246T12 ; COLEMAR
+CALCULO 2A                             ; ENGENHARIA AMBIENTAL     ; 246T34 ; COLEMAR
+CALCULO 1A                             ; ENGENHARIA CIVIL         ; 246T12 ; COLEMAR
+ALGEBRA LINEAR                         ; ENGENHARIA AMBIENTAL     ; 24T12  ; COLEMAR
+CALCULO 3A                             ; ENGENHARIA CIVIL         ; 24T12  ; COLEMAR
+PROBABILIDADE E ESTATISTICA A          ; ENGENHARIA ELETRICA      ; 46T34  ; COLEMAR
+GEOMETRIA ANALITICA                    ; ENGENHARIA CIVIL         ; 46T56  ; COLEMAR
+BIOESTATISTICA                         ; FARMACIA                 ; 46T23  ; COLEMAR
+BIOESTATISTICA                         ; NUTRICAO                 ; 46T45  ; COLEMAR
+BIOESTATISTICA 2                       ; MEDICINA                 ; 4T12   ; COLEMAR
+BIOESTATISTICA 2                       ; MEDICINA                 ; 6T12   ; COLEMAR
+ALGEBRA LINEAR                         ; ENGENHARIA ELETRICA      ; 35T12  ; COLEMAR
+CALCULO NUMERICO                       ; ENGENHARIA CIVIL         ; 35T34  ; COLEMAR
+BIOESTATISTICA                         ; FISIOTERAPIA             ; 35T45  ; COLEMAR
+CALCULO 2A                             ; ENGENHARIA DE COMPUTACAO ; 246N23 ; COLEMAR
+ESTATISTICA 2                          ; PSICOLOGIA               ; 24N23  ; COLEMAR
+PROBABILIDADE E ESTATISTICA A          ; ENGENHARIA DE COMPUTACAO ; 24N45  ; COLEMAR
+ALGEBRA LINEAR                         ; ENGENHARIA DE COMPUTACAO ; 35N45  ; COLEMAR
+CALCULO 1A                             ; INSTITUTO DE QUIMICA     ; 246M23 ; SAMAMBAIA
+CALCULO 1A                             ; INTELIGENCIA ARTIFICIAL  ; 246M45 ; SAMAMBAIA
+CALCULO 2A                             ; INSTITUTO DE QUIMICA     ; 246M23 ; SAMAMBAIA
+CALCULO 2A                             ; CIENCIA DA COMPUTACAO    ; 246M45 ; SAMAMBAIA
+CALCULO 2A                             ; ENG. DE ALIMENTOS        ; 246M23 ; SAMAMBAIA
+CALCULO 1A                             ; CIENCIA DA COMPUTACAO    ; 246M45 ; SAMAMBAIA
+ESTATISTICA 1                          ; GESTAO DA INFORMACAO     ; 246M23 ; SAMAMBAIA
+PROBABILIDADE E ESTATISTICA B          ; CIENCIAS ECONOMICAS      ; 46M45  ; SAMAMBAIA
+CALCULO 1B                             ; INSTITUTO DE QUIMICA     ; 24M23  ; SAMAMBAIA
+CALCULO 1A                             ; INSTITUTO DE FISICA      ; 246M45 ; SAMAMBAIA
+CALCULO 2B                             ; INSTITUTO DE QUIMICA     ; 24M23  ; SAMAMBAIA
+ALGEBRA LINEAR                         ; CIENCIA DA COMPUTACAO    ; 24M45  ; SAMAMBAIA
+EDO                                    ; INSTITUTO DE QUIMICA     ; 24M23  ; SAMAMBAIA
+EDO                                    ; CIENCIA DA COMPUTACAO    ; 24M45  ; SAMAMBAIA
+PROBABILIDADE E ESTATISTICA A          ; CIENCIA DA COMPUTACAO    ; 24M23  ; SAMAMBAIA
+CALCULO NUMERICO                       ; CIENCIA DA COMPUTACAO    ; 24M45  ; SAMAMBAIA
+ALGEBRA LINEAR                         ; ENG DE ALIMENTOS         ; 35M23  ; SAMAMBAIA
+CALCULO 1C                             ; CIENCIAS CONTABEIS       ; 35M45  ; SAMAMBAIA
+ESTATISTICA                            ; INSTITUTO DE QUIMICA     ; 35M23  ; SAMAMBAIA
+INTRODUCAO A PROBABILIDADE             ; GESTAO DE INFORMACAO     ; 35M23  ; SAMAMBAIA
+CALCULO 2B                             ; CIENCIAS ECONOMICAS      ; 46M23  ; SAMAMBAIA
+CALCULO 1C                             ; FARMACIA                 ; 46M45  ; SAMAMBAIA
+GEOMETRIA ANALITICA                    ; CIENCIA DA COMPUTACAO    ; 46M23  ; SAMAMBAIA
+ALGEBRA LINEAR                         ; INSTITUTO DE QUIMICA     ; 46M45  ; SAMAMBAIA
+NOCOES DE ATUARIA                      ; CIENCIAS CONTABEIS       ; 6M23   ; SAMAMBAIA
+CALCULO 2A                             ; INSTITUTO DE FISICA      ; 246T12 ; SAMAMBAIA
+CALCULO 2A                             ; INSTITUTO DE FISICA      ; 246T34 ; SAMAMBAIA
+CALCULO 2A                             ; ENGENHARIA MECANICA      ; 246T12 ; SAMAMBAIA
+ALGEBRA LINEAR                         ; ENGENHARIA MECANICA      ; 24T34  ; SAMAMBAIA
+PROBABILIDADE                          ; MATEMATICA               ; 246T12 ; SAMAMBAIA
+CALCULO 2B                             ; AGRONOMIA                ; 46T23  ; SAMAMBAIA
+CALCULO 2B                             ; AGRONOMIA                ; 46T45  ; SAMAMBAIA
+CALCULO 1B                             ; AGRONOMIA                ; 25T23  ; SAMAMBAIA
+CALCULO 1B                             ; AGRONOMIA                ; 25T45  ; SAMAMBAIA
+ALGEBRA LINEAR                         ; INSTITUTO DE FISICA      ; 24T12  ; SAMAMBAIA
+ALGEBRA LINEAR                         ; INSTITUTO DE FISICA      ; 24T34  ; SAMAMBAIA
+CALCULO 2B                             ; ENGENHARIA FLORESTAL     ; 24T23  ; SAMAMBAIA
+ALGEBRA LINEAR                         ; INTELIGENCIA ARTIFICIAL  ; 24T23  ; SAMAMBAIA
+ESTATISTICA 1                          ; GESTAO DA INFORMACAO     ; 35T23  ; SAMAMBAIA
+CALCULO 3A                             ; INSTITUTO DE QUIMICA     ; 35T45  ; SAMAMBAIA
+CALCULO NUMERICO                       ; ENGENHARIA DE ALIMENTOS  ; 36T23  ; SAMAMBAIA
+ESTATISTICA                            ; MATEMATICA               ; 35T34  ; SAMAMBAIA
+CALCULO NUMERICO                       ; ENGENHARIA DA MECANICA   ; 35T12  ; SAMAMBAIA
+GEOMETRIA ANALITICA                    ; ESTATISTICA              ; 35T34  ; SAMAMBAIA
+PROBABILIDADE E ESTATISTICA A          ; ENGENHARIA MECANICA      ; 35T12  ; SAMAMBAIA
+CALCULO 1A                             ; INSTITUTO DE FISICA      ; 246N23 ; SAMAMBAIA
+ALGEBRA LINEAR                         ; SISTEMAS DE INFORMACAO   ; 24N23  ; SAMAMBAIA
+ALGEBRA LINEAR                         ; ENGENHARIA DE SOFTWARE   ; 24N45  ; SAMAMBAIA
+PROBABILIDADE E ESTATISTICA A          ; ENGENHARIA DE SOFTWARE   ; 24N23  ; SAMAMBAIA
+PROBABILIDADE E ESTATISTICA A          ; SISTEMAS DE INFORMACAO   ; 24N45  ; SAMAMBAIA
+CALCULO 2B                             ; ADMINISTRACAO            ; 35N23  ; SAMAMBAIA
+CALCULO 2B                             ; INSTITUTO DE QUIMICA     ; 35N45  ; SAMAMBAIA
+CALCULO 1C                             ; CIENCIAS CONTABEIS       ; 35N23  ; SAMAMBAIA
+CALCULO 1B                             ; ADMINISTRACAO            ; 35N45  ; SAMAMBAIA
+CALCULO 3A                             ; INSTITUTO DE FISICA      ; 35N23  ; SAMAMBAIA
+EDO                                    ; INSTITUTO DE FISICA      ; 35N45  ; SAMAMBAIA
+CALCULO 2B                             ; CIENCIAS ECONOMICAS      ; 46N23  ; SAMAMBAIA
+PROBABILIDADE E ESTATISTICA B          ; CIENCIAS ECONOMICAS      ; 46N45  ; SAMAMBAIA
+ESTATISTICA DESCRITIVA E PROBABILIDADE ; ADMINISTRACAO            ; 46N23  ; SAMAMBAIA
+ESTATISTICA INFERENCIAL                ; ADMINISTRACAO            ; 46N45  ; SAMAMBAIA
+NOCOES DE ATUARIA                      ; CIENCIAS CONTABEIS       ; 6N23   ; SAMAMBAIA
+ESTATISTICA                            ; MATEMATICA               ; 35N34  ; SAMAMBAIA
+MATEMATICA FINANCEIRA                  ; SISTEMAS DE INFORMACAO   ; 35N45  ; SAMAMBAIA
+PROBABILIDADE                          ; MATEMATICA               ; 35N45  ; SAMAMBAIA
