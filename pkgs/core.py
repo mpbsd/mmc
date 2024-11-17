@@ -33,47 +33,90 @@ RE = {
 # }}}
 
 
-def semester():
-    y = datetime.today().strftime("%Y")
-    m = datetime.today().strftime("%m")
-    return f"{y}_1" if int(m) < 7 else f"{y}_2"
-
-
 def REGEXP(pattern, input):
     regexp = re.compile(pattern)
     return bool(regexp.match(input))
 
 
-def HPW(schdl):
-    hpw = [x for x in RE["HPW"].keys() if RE["HPW"][x]["A"].match(schdl[3])][0]
-    return hpw
+def TIMETABLE_COMPONENTS(timetable):
+    RE_TIMETABLE = re.compile(r"^([0-9]+)([MTN])([0-9]+)$")
+    return [x for x in RE_TIMETABLE.split(timetable) if x != ""]
 
 
-def consecutive(schdl1, schdl2):
-    re_digit = re.compile(r"([1-6])")
-    expl1 = [x for x in EXPLODE(schdl1) if x != ""]
-    expl2 = [x for x in EXPLODE(schdl2) if x != ""]
-    C1 = expl1[1] == expl2[1]
-    x1, y1 = [x for x in re_digit.split(expl1[2]) if x != ""]
-    x2, y2 = [x for x in re_digit.split(expl2[2]) if x != ""]
-    C2 = (int(y1) + 1 == int(x2)) or (int(y2) + 1 == int(x1))
-    return (C1 and C2)
+def HPW(timetable):
+    M = len(TIMETABLE_COMPONENTS(timetable)[0])
+    N = len(TIMETABLE_COMPONENTS(timetable)[2])
+    return M * N
+
+
+def DIGITS(number):
+    RE_DIGITS = re.compile(r"([1-6])")
+    return [int(x) for x in RE_DIGITS.split(number) if x != ""]
+
+
+def CONSECUTIVE(timetable1, timetable2):
+    COMP1 = TIMETABLE_COMPONENTS(timetable1)
+    COMP2 = TIMETABLE_COMPONENTS(timetable2)
+    DIGT1 = DIGITS(COMP1[2])
+    DIGT2 = DIGITS(COMP2[2])
+    COND0 = len([x for x in DIGITS(COMP1[0]) if x in DIGITS(COMP2[0])]) > 0
+    COND1 = COMP1[1] == COMP2[1]
+    COND2 = (DIGT1[1] + 1 == DIGT2[0]) or (DIGT2[1] + 1 == DIGT1[0])
+    return (COND0 and COND1 and COND2)
+
+
+def SAME_DAYS(timetable1, timetable2):
+    COMP1 = TIMETABLE_COMPONENTS(timetable1)
+    COMP2 = TIMETABLE_COMPONENTS(timetable2)
+    return COMP1[0] == COMP2[0]
+
+
+def SAME_PERIOD(timetable1, timetable2):
+    COMP1 = TIMETABLE_COMPONENTS(timetable1)
+    COMP2 = TIMETABLE_COMPONENTS(timetable2)
+    return COMP1[1] == COMP2[1]
+
+
+def DAYS(timetable):
+    COMP = TIMETABLE_COMPONENTS(timetable)
+    return COMP[0]
+
+
+def PERIOD(timetable):
+    COMP = TIMETABLE_COMPONENTS(timetable)
+    return COMP[1]
+
+
+def ORDINALS(timetable):
+    COMP = TIMETABLE_COMPONENTS(timetable)
+    return COMP[2]
+
+
+def CURRENT_SEMESTER():
+    y = datetime.today().strftime("%Y")
+    m = datetime.today().strftime("%m")
+    return f"{y}_1" if int(m) < 7 else f"{y}_2"
 
 
 def main():
-    SEMESTER = semester()
+    SEMESTER = CURRENT_SEMESTER()
 
     with sqlite3.connect("data/sqlite.db") as connection:
         connection.create_function("REGEXP", 2, REGEXP)
         cursor = connection.cursor()
 
         BLOB = cursor.execute(
-            "SELECT * FROM blob WHERE semester = ?", [SEMESTER]
+            "SELECT campus, gradc, dscpln, timetable FROM blob"
+            " WHERE semester = ? ORDER BY timetable",
+            [SEMESTER]
         ).fetchall()
 
-        CAMPUS = list(
-            map(itemgetter(0), groupby(sorted([x[0] for x in BLOB])))
-        )
+        for blob in BLOB:
+            print(blob)
+
+        # CAMPUS = list(
+        #     map(itemgetter(0), groupby(sorted([x[0] for x in BLOB])))
+        # )
 
         # GRADCOURSE = list(
         #     map(itemgetter(0), groupby(sorted([x[1] for x in BLOB])))
@@ -87,21 +130,21 @@ def main():
         #     map(itemgetter(0), groupby(sorted([x[3] for x in BLOB])))
         # )
 
-        for campus in CAMPUS:
-            for H in RE["HPW"].keys():
-                for P in RE["HPW"][H].keys():
-                    QTY = cursor.execute(
-                        "SELECT COUNT(*) from blob"
-                        " WHERE semester = ? AND"
-                        " campus = ? AND schdl REGEXP ?;",
-                        [SEMESTER, campus, RE["HPW"][H][P]]
-                    ).fetchone()[0]
-                    print(f"{campus}, {P}, {H}, {QTY:2d}")
+        # for campus in CAMPUS:
+        #     for H in RE["HPW"].keys():
+        #         for P in RE["HPW"][H].keys():
+        #             QTY = cursor.execute(
+        #                 "SELECT COUNT(*) from blob"
+        #                 " WHERE semester = ? AND"
+        #                 " campus = ? AND timetable REGEXP ?;",
+        #                 [SEMESTER, campus, RE["HPW"][H][P]]
+        #             ).fetchone()[0]
+        #             print(f"{campus}, {P}, {H}, {QTY:2d}")
 
         # BLOB = cursor.execute(
-        #     "SELECT blob.campus, blob.dscpln, blob.schdl, COUNT(*) FROM blob"
+        #     "SELECT blob.campus, blob.dscpln, blob.timetable, COUNT(*) FROM blob"
         #     " WHERE semester = ?"
-        #     " GROUP BY blob.campus, blob.dscpln, blob.schdl;",
+        #     " GROUP BY blob.campus, blob.dscpln, blob.timetable;",
         #     [SEMESTER],
         # ).fetchall()
 
