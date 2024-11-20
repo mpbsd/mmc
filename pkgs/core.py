@@ -54,6 +54,27 @@ def DIGITS(number):
     return [int(x) for x in RE_DIGITS.split(number) if x != ""]
 
 
+def DAYS(timetable):
+    COMP = TIMETABLE_COMPONENTS(timetable)
+    return COMP[0]
+
+
+def PERIOD(timetable):
+    COMP = TIMETABLE_COMPONENTS(timetable)
+    return COMP[1]
+
+
+def ORDINALS(timetable):
+    COMP = TIMETABLE_COMPONENTS(timetable)
+    return COMP[2]
+
+
+def CURRENT_SEMESTER():
+    y = datetime.today().strftime("%Y")
+    m = datetime.today().strftime("%m")
+    return f"{y}_1" if int(m) < 7 else f"{y}_2"
+
+
 def CONSECUTIVE(timetable1, timetable2):
     COMP1 = TIMETABLE_COMPONENTS(timetable1)
     COMP2 = TIMETABLE_COMPONENTS(timetable2)
@@ -75,27 +96,6 @@ def SAME_PERIOD(timetable1, timetable2):
     COMP1 = TIMETABLE_COMPONENTS(timetable1)
     COMP2 = TIMETABLE_COMPONENTS(timetable2)
     return COMP1[1] == COMP2[1]
-
-
-def DAYS(timetable):
-    COMP = TIMETABLE_COMPONENTS(timetable)
-    return COMP[0]
-
-
-def PERIOD(timetable):
-    COMP = TIMETABLE_COMPONENTS(timetable)
-    return COMP[1]
-
-
-def ORDINALS(timetable):
-    COMP = TIMETABLE_COMPONENTS(timetable)
-    return COMP[2]
-
-
-def CURRENT_SEMESTER():
-    y = datetime.today().strftime("%Y")
-    m = datetime.today().strftime("%m")
-    return f"{y}_1" if int(m) < 7 else f"{y}_2"
 
 
 def main():
