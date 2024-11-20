@@ -1,0 +1,111 @@
+03 ; calculo 1a                             ; engenharia de materiais   ; 246m23 ; 2023_1
+03 ; calculo 1a                             ; engenharia de materiais   ; 246m45 ; 2023_1
+03 ; calculo 1a                             ; engenharia de materiais   ; 246t23 ; 2023_1
+03 ; calculo 1a                             ; engenharia de materiais   ; 246t45 ; 2023_1
+03 ; geometria analitica                    ; engenharia de transportes ; 24m23  ; 2023_1
+03 ; geometria analitica                    ; engenharia de producao    ; 24m45  ; 2023_1
+03 ; geometria analitica                    ; engenharia de materiais   ; 24t23  ; 2023_1
+03 ; calculo 3a                             ; engenharia de materiais   ; 24m45  ; 2023_1
+03 ; calculo 3b                             ; engenharia de transportes ; 24t23  ; 2023_1
+03 ; calculo 3b                             ; engenharia de producao    ; 24t45  ; 2023_1
+03 ; probabilidade e estatistica a          ; engenharia de transportes ; 24m23  ; 2023_1
+03 ; probabilidade e estatistica a          ; engenharia de materiais   ; 24m45  ; 2023_1
+03 ; probabilidade e estatistica a          ; engenharia de producao    ; 24t23  ; 2023_1
+03 ; probabilidade e estatistica a          ; engenharia de materiais   ; 24t45  ; 2023_1
+01 ; calculo 2a                             ; engenharia civil          ; 246m12 ; 2023_1
+01 ; calculo 2a                             ; engenharia de computacao  ; 246m34 ; 2023_1
+01 ; calculo 1a                             ; engenharia eletrica       ; 246m12 ; 2023_1
+01 ; calculo 1a                             ; engenharia de computacao  ; 246m34 ; 2023_1
+01 ; calculo 3                              ; engenharia eletrica       ; 24m12  ; 2023_1
+01 ; algebra linear                         ; engenharia civil          ; 24m34  ; 2023_1
+01 ; algebra linear                         ; engenharia de computacao  ; 24m56  ; 2023_1
+01 ; edo                                    ; engenharia civil          ; 24m12  ; 2023_1
+01 ; edo                                    ; engenharia eletrica       ; 24m34  ; 2023_1
+01 ; edo                                    ; engenharia ambiental      ; 24m56  ; 2023_1
+01 ; probabilidade e estatistica a          ; engenharia de computacao  ; 46m12  ; 2023_1
+01 ; probabilidade e estatistica a          ; engenharia ambiental      ; 46m34  ; 2023_1
+01 ; probabilidade e estatistica a          ; engenharia civil          ; 46m56  ; 2023_1
+01 ; geometria analitica                    ; engenharia eletrica       ; 35m12  ; 2023_1
+01 ; calculo numerico                       ; engenharia eletrica       ; 35m34  ; 2023_1
+01 ; calculo 1a                             ; engenharia civil          ; 246t12 ; 2023_1
+01 ; calculo 1a                             ; engenharia ambiental      ; 246t34 ; 2023_1
+01 ; calculo 2a                             ; engenharia eletrica       ; 246t12 ; 2023_1
+01 ; calculo 3a                             ; engenharia civil          ; 24t34  ; 2023_1
+01 ; algebra linear                         ; engenharia eletrica       ; 35t12  ; 2023_1
+01 ; calculo numerico                       ; engenharia civil          ; 35t12  ; 2023_1
+01 ; estatistica 1                          ; psicologia                ; 35t56  ; 2023_1
+01 ; probabilidade e estatistica a          ; engenharia eletrica       ; 46t34  ; 2023_1
+01 ; geometria analitica                    ; engenharia civil          ; 46t56  ; 2023_1
+01 ; bioestatistica                         ; farmacia                  ; 46t23  ; 2023_1
+01 ; bioestatistica                         ; nutricao                  ; 46t45  ; 2023_1
+01 ; bioestatistica 1                       ; medicina                  ; 4t12   ; 2023_1
+01 ; bioestatistica 1                       ; medicina                  ; 6t12   ; 2023_1
+01 ; calculo 1a                             ; engenharia de computacao  ; 246n23 ; 2023_1
+01 ; edo                                    ; engenharia de computacao  ; 46n45  ; 2023_1
+01 ; matematica discreta                    ; engenharia de computacao  ; 35n23  ; 2023_1
+01 ; calculo numerico                       ; engenharia de computacao  ; 35n45  ; 2023_1
+01 ; calculo 3a                             ; engenharia de computacao  ; 35n45  ; 2023_1
+02 ; calculo 1a                             ; engenharia de alimentos   ; 246m23 ; 2023_1
+02 ; calculo 1a                             ; ciencia da computacao     ; 246m45 ; 2023_1
+02 ; calculo 1a                             ; instituto de quimica      ; 246m23 ; 2023_1
+02 ; geometria analitica                    ; engenharia de alimentos   ; 46m45  ; 2023_1
+02 ; calculo 2a                             ; instituto de quimica      ; 246m23 ; 2023_1
+02 ; calculo 2a                             ; ciencia da computacao     ; 246m45 ; 2023_1
+02 ; estatistica ii                         ; gestao da informacao      ; 246m23 ; 2023_1
+02 ; estatistica                            ; ciencias contabeis        ; 46m45  ; 2023_1
+02 ; calculo numerico                       ; instituto de quimica      ; 24m23  ; 2023_1
+02 ; calculo numerico                       ; ciencia da computacao     ; 24m45  ; 2023_1
+02 ; algebra linear                         ; ciencias economicas       ; 24m23  ; 2023_1
+02 ; algebra linear                         ; ciencia da computacao     ; 24m45  ; 2023_1
+02 ; probabilidade e estatistica            ; relacoes internacionais   ; 24m23  ; 2023_1
+02 ; introducao a estatistica               ; relacoes publicas         ; 24m45  ; 2023_1
+02 ; probabilidade e estatistica a          ; ciencia da computacao     ; 24m23  ; 2023_1
+02 ; probabilidade e estatistica a          ; inteligencia artificial   ; 24m45  ; 2023_1
+02 ; edo                                    ; ciencia da computacao     ; 24m45  ; 2023_1
+02 ; estatistica                            ; instituto de quimica      ; 35m23  ; 2023_1
+02 ; calculo 3a                             ; engenharia de alimentos   ; 35m23  ; 2023_1
+02 ; geometria analitica                    ; ciencia da computacao     ; 46m23  ; 2023_1
+02 ; algebra linear                         ; instituto de quimica      ; 46m45  ; 2023_1
+02 ; calculo 1b                             ; ciencias economicas       ; 46m23  ; 2023_1
+02 ; calculo 1b                             ; engenharia florestal      ; 46m45  ; 2023_1
+02 ; calculo 1b                             ; instituto de quimica      ; 46m23  ; 2023_1
+02 ; calculo 1c                             ; farmacia                  ; 46m45  ; 2023_1
+02 ; calculo 2b                             ; instituto de quimica      ; 46m23  ; 2023_1
+02 ; estatistica                            ; comunicacao social        ; 46m45  ; 2023_1
+02 ; calculo 1a                             ; engenharia mecanica       ; 246t12 ; 2023_1
+02 ; calculo 1a                             ; instituto de fisica       ; 246t34 ; 2023_1
+02 ; calculo 1a                             ; instituto de fisica       ; 246t56 ; 2023_1
+02 ; analise real i                         ; matematica                ; 246t34 ; 2023_1
+02 ; estatistica                            ; matematica                ; 246t56 ; 2023_1
+02 ; calculo 1c                             ; zootecnia                 ; 24t23  ; 2023_1
+02 ; calculo 1c                             ; ciencias biologicas       ; 24t45  ; 2023_1
+02 ; calculo 1b                             ; agronomia                 ; 25t23  ; 2023_1
+02 ; calculo 1b                             ; agronomia                 ; 25t45  ; 2023_1
+02 ; geometria analitica                    ; instituto de fisica       ; 24t12  ; 2023_1
+02 ; geometria analitica                    ; engenharia mecanica       ; 24t34  ; 2023_1
+02 ; probabilidade e estatistica a          ; instituto de fisica       ; 24t12  ; 2023_1
+02 ; edo                                    ; instituto de fisica       ; 24t34  ; 2023_1
+02 ; edo                                    ; engenharia mecanica       ; 24t56  ; 2023_1
+02 ; calculo 3a                             ; engenharia mecanica       ; 24t34  ; 2023_1
+02 ; calculo 3a                             ; instituto de fisica       ; 24t56  ; 2023_1
+02 ; calculo 3a                             ; instituto de quimica      ; 35t23  ; 2023_1
+02 ; calculo 1c                             ; arquitetura               ; 35t45  ; 2023_1
+02 ; edo                                    ; engenharia de alimentos   ; 35t23  ; 2023_1
+02 ; calculo numerico                       ; instituto de fisica       ; 35t34  ; 2023_1
+02 ; calculo 1c                             ; biomedicina               ; 46t23  ; 2023_1
+02 ; calculo 1c                             ; biotecnologia             ; 46t45  ; 2023_1
+02 ; calculo 2b                             ; agronomia                 ; 46t23  ; 2023_1
+02 ; calculo 2b                             ; agronomia                 ; 46t45  ; 2023_1
+02 ; calculo 1c                             ; ciencias ambientais       ; 46t23  ; 2023_1
+02 ; calculo 1a                             ; engenharia de software    ; 246n23 ; 2023_1
+02 ; calculo 1a                             ; sistemas de informacao    ; 246n45 ; 2023_1
+02 ; calculo 2a                             ; instituto de fisica       ; 246n23 ; 2023_1
+02 ; algebra linear                         ; ciencias economicas       ; 24n45  ; 2023_1
+02 ; calculo 2b                             ; administracao             ; 35n23  ; 2023_1
+02 ; calculo 1b                             ; instituto de quimica      ; 35n45  ; 2023_1
+02 ; geometria analitica                    ; instituto de fisica       ; 35n45  ; 2023_1
+02 ; calculo 1b                             ; ciencias economicas       ; 35n23  ; 2023_1
+02 ; calculo 1b                             ; administracao             ; 35n45  ; 2023_1
+02 ; estatistica descritiva e probabilidade ; administracao             ; 46n23  ; 2023_1
+02 ; estatistica                            ; ciencias contabeis        ; 46n45  ; 2023_1
+02 ; estatistica inferencial                ; administracao             ; 46n45  ; 2023_1
