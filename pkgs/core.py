@@ -38,34 +38,34 @@ def REGEXP(pattern, input):
     return bool(regexp.match(input))
 
 
-def TIMETABLE_COMPONENTS(timetable):
+def COMPONENTS_TIMETABLE(timetable):
     RE_TIMETABLE = re.compile(r"^([0-9]+)([MTN])([0-9]+)$")
     return [x for x in RE_TIMETABLE.split(timetable) if x != ""]
 
 
 def HPW(timetable):
-    M = len(TIMETABLE_COMPONENTS(timetable)[0])
-    N = len(TIMETABLE_COMPONENTS(timetable)[2])
+    M = len(COMPONENTS_TIMETABLE(timetable)[0])
+    N = len(COMPONENTS_TIMETABLE(timetable)[2])
     return M * N
 
 
-def DIGITS(number):
+def INDIVIDUAL_DIGITS(number):
     RE_DIGITS = re.compile(r"([1-6])")
     return [int(x) for x in RE_DIGITS.split(number) if x != ""]
 
 
-def DAYS(timetable):
-    COMP = TIMETABLE_COMPONENTS(timetable)
+def WEEKDAYS(timetable):
+    COMP = COMPONENTS_TIMETABLE(timetable)
     return COMP[0]
 
 
-def PERIOD(timetable):
-    COMP = TIMETABLE_COMPONENTS(timetable)
+def PERIOD_OF_THE_DAY(timetable):
+    COMP = COMPONENTS_TIMETABLE(timetable)
     return COMP[1]
 
 
 def ORDINALS(timetable):
-    COMP = TIMETABLE_COMPONENTS(timetable)
+    COMP = COMPONENTS_TIMETABLE(timetable)
     return COMP[2]
 
 
@@ -75,9 +75,9 @@ def CURRENT_SEMESTER():
     return f"{y}_1" if int(m) < 7 else f"{y}_2"
 
 
-def CONSECUTIVE(timetable1, timetable2):
-    COMP1 = TIMETABLE_COMPONENTS(timetable1)
-    COMP2 = TIMETABLE_COMPONENTS(timetable2)
+def CLASSES_ARE_CONSECUTIVE(timetable1, timetable2):
+    COMP1 = COMPONENTS_TIMETABLE(timetable1)
+    COMP2 = COMPONENTS_TIMETABLE(timetable2)
     DIGT1 = DIGITS(COMP1[2])
     DIGT2 = DIGITS(COMP2[2])
     COND0 = len([x for x in DIGITS(COMP1[0]) if x in DIGITS(COMP2[0])]) > 0
@@ -86,37 +86,38 @@ def CONSECUTIVE(timetable1, timetable2):
     return (COND0 and COND1 and COND2)
 
 
-def SAME_DAYS(timetable1, timetable2):
-    COMP1 = TIMETABLE_COMPONENTS(timetable1)
-    COMP2 = TIMETABLE_COMPONENTS(timetable2)
+def CLASSES_OCCUR_IN_THE_SAME_DAYS(timetable1, timetable2):
+    COMP1 = COMPONENTS_TIMETABLE(timetable1)
+    COMP2 = COMPONENTS_TIMETABLE(timetable2)
     return COMP1[0] == COMP2[0]
 
 
-def SAME_PERIOD(timetable1, timetable2):
-    COMP1 = TIMETABLE_COMPONENTS(timetable1)
-    COMP2 = TIMETABLE_COMPONENTS(timetable2)
+def CLASSES_OCCUR_IN_THE_SAME_PERIOD(timetable1, timetable2):
+    COMP1 = COMPONENTS_TIMETABLE(timetable1)
+    COMP2 = COMPONENTS_TIMETABLE(timetable2)
     return COMP1[1] == COMP2[1]
 
 
 def main():
     SEMESTER = CURRENT_SEMESTER()
 
-    with sqlite3.connect("data/sqlite.db") as connection:
+    with sqlite3.connect("data/sql/sqlite.db") as connection:
         connection.create_function("REGEXP", 2, REGEXP)
         cursor = connection.cursor()
 
         BLOB = cursor.execute(
-            "SELECT campus, gradc, dscpln, timetable FROM blob"
-            " WHERE semester = ? ORDER BY timetable",
-            [SEMESTER]
+            "SELECT place, gradc, field, setup FROM blob"
+            " WHERE aterm = ? ORDER BY setup", [SEMESTER]
         ).fetchall()
 
         for blob in BLOB:
             print(blob)
 
-        # CAMPUS = list(
-        #     map(itemgetter(0), groupby(sorted([x[0] for x in BLOB])))
-        # )
+        CAMPUS = list(
+            map(itemgetter(0), groupby(sorted([x[0] for x in BLOB])))
+        )
+
+        print(CAMPUS)
 
         # GRADCOURSE = list(
         #     map(itemgetter(0), groupby(sorted([x[1] for x in BLOB])))
