@@ -4,8 +4,6 @@
 import re
 import sqlite3
 from datetime import datetime
-from itertools import combinations, groupby, product
-from operator import itemgetter
 
 # RE {{{
 RE = {
@@ -75,6 +73,10 @@ def CURRENT_SEMESTER():
     return f"{y}_1" if int(m) < 7 else f"{y}_2"
 
 
+def CLASSES_TAKE_PLACE_IN_THE_SAME_CAMPUS(blobslist):
+    return True if len([blob[0] for blob in blobslist]) == 1 else False
+
+
 def CLASSES_ARE_CONSECUTIVE(timetable1, timetable2):
     COMP1 = COMPONENTS_TIMETABLE(timetable1)
     COMP2 = COMPONENTS_TIMETABLE(timetable2)
@@ -83,7 +85,7 @@ def CLASSES_ARE_CONSECUTIVE(timetable1, timetable2):
     COND0 = len([x for x in DIGITS(COMP1[0]) if x in DIGITS(COMP2[0])]) > 0
     COND1 = COMP1[1] == COMP2[1]
     COND2 = (DIGT1[1] + 1 == DIGT2[0]) or (DIGT2[1] + 1 == DIGT1[0])
-    return (COND0 and COND1 and COND2)
+    return COND0 and COND1 and COND2
 
 
 def CLASSES_OCCUR_IN_THE_SAME_DAYS(timetable1, timetable2):
@@ -105,68 +107,159 @@ def main():
         connection.create_function("REGEXP", 2, REGEXP)
         cursor = connection.cursor()
 
-        BLOB = cursor.execute(
-            "SELECT place, gradc, field, setup FROM blob"
-            " WHERE aterm = ? ORDER BY setup", [SEMESTER]
+        HPW08 = cursor.execute(
+            "SELECT * FROM blob AS B1 CROSS JOIN blob as B2 WHERE"
+            " B1.aterm = ?"
+            " AND"
+            " B1.aterm = B2.aterm"
+            " AND"
+            " B1.place = B2.place"
+            " AND"
+            " B1.setup REGEXP ?"
+            " AND"
+            " B2.setup REGEXP ?",
+            [SEMESTER, RE["HPW"]["4"]["A"], RE["HPW"]["4"]["A"]],
         ).fetchall()
 
-        for blob in BLOB:
-            print(blob)
+        HPW10 = cursor.execute(
+            "SELECT * FROM blob AS B1 CROSS JOIN blob as B2 WHERE"
+            " B1.aterm = ?"
+            " AND"
+            " B1.aterm = B2.aterm"
+            " AND"
+            " B1.place = B2.place"
+            " AND"
+            " B1.setup REGEXP ?"
+            " AND"
+            " B2.setup REGEXP ?",
+            [SEMESTER, RE["HPW"]["4"]["A"], RE["HPW"]["6"]["A"]],
+        ).fetchall()
 
-        CAMPUS = list(
-            map(itemgetter(0), groupby(sorted([x[0] for x in BLOB])))
-        )
+        HPW12_P1 = cursor.execute(
+            "SELECT * FROM blob AS B1 CROSS JOIN blob as B2 WHERE"
+            " B1.aterm = ?"
+            " AND"
+            " B1.aterm = B2.aterm"
+            " AND"
+            " B1.place = B2.place"
+            " AND"
+            " B1.setup REGEXP ?"
+            " AND"
+            " B2.setup REGEXP ?",
+            [SEMESTER, RE["HPW"]["6"]["A"], RE["HPW"]["6"]["A"]],
+        ).fetchall()
 
-        print(CAMPUS)
+        HPW12_P2 = cursor.execute(
+            "SELECT "
+            "  B1.place AS place1,"
+            "  B1.gradc AS gradc1,"
+            "  B1.field AS field1,"
+            "  B1.setup AS setup1,"
+            "  B1.aterm AS aterm1,"
+            "  C1.place2 AS place2,"
+            "  C1.gradc2 AS gradc2,"
+            "  C1.field2 AS field2,"
+            "  C1.setup2 AS setup2,"
+            "  C1.aterm2 AS aterm2,"
+            "  C1.place3 AS place3,"
+            "  C1.gradc3 AS gradc3,"
+            "  C1.field3 AS field3,"
+            "  C1.setup3 AS setup3,"
+            "  C1.aterm3 AS aterm3 "
+            "FROM blob AS B1 CROSS JOIN("
+            "  SELECT "
+            "    B2.place AS place2,"
+            "    B2.gradc AS gradc2,"
+            "    B2.field AS field2,"
+            "    B2.setup AS setup2,"
+            "    B2.aterm AS aterm2,"
+            "    B3.place AS place3,"
+            "    B3.gradc AS gradc3,"
+            "    B3.field AS field3,"
+            "    B3.setup AS setup3,"
+            "    B3.aterm AS aterm3"
+            "  FROM blob AS B2 CROSS JOIN blob AS B3"
+            "  WHERE"
+            "    aterm2 = aterm3"
+            "    AND"
+            "    place2 = place3) AS C1 "
+            "WHERE"
+            "  aterm1 = ?"
+            "  AND"
+            "  aterm1 = aterm2"
+            "  AND"
+            "  place1 = place2"
+            "  AND"
+            "  setup1 REGEXP ?"
+            "  AND"
+            "  setup2 REGEXP ?"
+            "  AND"
+            "  setup3 REGEXP ?",
+            [
+                SEMESTER,
+                RE["HPW"]["4"]["A"],
+                RE["HPW"]["4"]["A"],
+                RE["HPW"]["4"]["A"],
+            ],
+        ).fetchall()
 
-        # GRADCOURSE = list(
-        #     map(itemgetter(0), groupby(sorted([x[1] for x in BLOB])))
-        # )
+        HPW12 = HPW12_P1 + HPW12_P2
 
-        # DISCIPLINE = list(
-        #     map(itemgetter(0), groupby(sorted([x[2] for x in BLOB])))
-        # )
+        HPW14 = cursor.execute(
+            "SELECT "
+            "  B1.place AS place1,"
+            "  B1.gradc AS gradc1,"
+            "  B1.field AS field1,"
+            "  B1.setup AS setup1,"
+            "  B1.aterm AS aterm1,"
+            "  C1.place2 AS place2,"
+            "  C1.gradc2 AS gradc2,"
+            "  C1.field2 AS field2,"
+            "  C1.setup2 AS setup2,"
+            "  C1.aterm2 AS aterm2,"
+            "  C1.place3 AS place3,"
+            "  C1.gradc3 AS gradc3,"
+            "  C1.field3 AS field3,"
+            "  C1.setup3 AS setup3,"
+            "  C1.aterm3 AS aterm3 "
+            "FROM blob AS B1 CROSS JOIN("
+            "  SELECT "
+            "    B2.place AS place2,"
+            "    B2.gradc AS gradc2,"
+            "    B2.field AS field2,"
+            "    B2.setup AS setup2,"
+            "    B2.aterm AS aterm2,"
+            "    B3.place AS place3,"
+            "    B3.gradc AS gradc3,"
+            "    B3.field AS field3,"
+            "    B3.setup AS setup3,"
+            "    B3.aterm AS aterm3"
+            "  FROM blob AS B2 CROSS JOIN blob AS B3"
+            "  WHERE"
+            "    aterm2 = aterm3"
+            "    AND"
+            "    place2 = place3) AS C1 "
+            "WHERE"
+            "  aterm1 = ?"
+            "  AND"
+            "  aterm1 = aterm2"
+            "  AND"
+            "  place1 = place2"
+            "  AND"
+            "  setup1 REGEXP ?"
+            "  AND"
+            "  setup2 REGEXP ?"
+            "  AND"
+            "  setup3 REGEXP ?",
+            [
+                SEMESTER,
+                RE["HPW"]["4"]["A"],
+                RE["HPW"]["4"]["A"],
+                RE["HPW"]["6"]["A"],
+            ],
+        ).fetchall()
 
-        # TIMETABLE = list(
-        #     map(itemgetter(0), groupby(sorted([x[3] for x in BLOB])))
-        # )
-
-        # for campus in CAMPUS:
-        #     for H in RE["HPW"].keys():
-        #         for P in RE["HPW"][H].keys():
-        #             QTY = cursor.execute(
-        #                 "SELECT COUNT(*) from blob"
-        #                 " WHERE semester = ? AND"
-        #                 " campus = ? AND timetable REGEXP ?;",
-        #                 [SEMESTER, campus, RE["HPW"][H][P]]
-        #             ).fetchone()[0]
-        #             print(f"{campus}, {P}, {H}, {QTY:2d}")
-
-        # BLOB = cursor.execute(
-        #     "SELECT blob.campus, blob.dscpln, blob.timetable, COUNT(*) FROM blob"
-        #     " WHERE semester = ?"
-        #     " GROUP BY blob.campus, blob.dscpln, blob.timetable;",
-        #     [SEMESTER],
-        # ).fetchall()
-
-        # X = {
-        #     "2": [x[:4] for x in BLOB if RE["HPW"]["2"]["A"].match(x[3])],
-        #     "4": [x[:4] for x in BLOB if RE["HPW"]["4"]["A"].match(x[3])],
-        #     "6": [x[:4] for x in BLOB if RE["HPW"]["6"]["A"].match(x[3])],
-        # }
-
-        # Y = {}
-
-        # Y["8"] = list(combinations(X["4"], 2))
-
-        # Y["10"] = list(product(X["4"], X["6"]))
-        # Y["12"] = list(combinations(X["4"], 3)) + list(combinations(X["6"], 2))
-        # Y["14"] = list(product(Y["08"], X["6"]))
-        # Y["16"] = list(combinations(X["4"], 4)) + list(product(X["4"], Y["12"]))
-
-        # print([y for y in Y["8"] if feasible(2, y) is True])
-
-        # print(Y["8"])
+        print(HPW14)
 
 
 if __name__ == "__main__":
