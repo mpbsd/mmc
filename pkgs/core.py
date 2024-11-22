@@ -118,7 +118,7 @@ def main():
             " B1.setup REGEXP ?"
             " AND"
             " B2.setup REGEXP ?",
-            [SEMESTER, RE["HPW"]["4"]["A"], RE["HPW"]["4"]["A"]],
+            [SEMESTER, RE["HPW"]["4"]["A"], RE["HPW"]["4"]["A"]]
         ).fetchall()
 
         HPW10 = cursor.execute(
@@ -132,7 +132,7 @@ def main():
             " B1.setup REGEXP ?"
             " AND"
             " B2.setup REGEXP ?",
-            [SEMESTER, RE["HPW"]["4"]["A"], RE["HPW"]["6"]["A"]],
+            [SEMESTER, RE["HPW"]["4"]["A"], RE["HPW"]["6"]["A"]]
         ).fetchall()
 
         HPW12_P1 = cursor.execute(
@@ -146,7 +146,7 @@ def main():
             " B1.setup REGEXP ?"
             " AND"
             " B2.setup REGEXP ?",
-            [SEMESTER, RE["HPW"]["6"]["A"], RE["HPW"]["6"]["A"]],
+            [SEMESTER, RE["HPW"]["6"]["A"], RE["HPW"]["6"]["A"]]
         ).fetchall()
 
         HPW12_P2 = cursor.execute(
@@ -199,8 +199,8 @@ def main():
                 SEMESTER,
                 RE["HPW"]["4"]["A"],
                 RE["HPW"]["4"]["A"],
-                RE["HPW"]["4"]["A"],
-            ],
+                RE["HPW"]["4"]["A"]
+            ]
         ).fetchall()
 
         HPW12 = HPW12_P1 + HPW12_P2
@@ -255,11 +255,121 @@ def main():
                 SEMESTER,
                 RE["HPW"]["4"]["A"],
                 RE["HPW"]["4"]["A"],
-                RE["HPW"]["6"]["A"],
-            ],
+                RE["HPW"]["6"]["A"]
+            ]
         ).fetchall()
 
-        print(HPW14)
+        HPW16_P1 = cursor.execute(
+            "SELECT "
+            "  B1.place AS place1,"
+            "  B1.gradc AS gradc1,"
+            "  B1.field AS field1,"
+            "  B1.setup AS setup1,"
+            "  B1.aterm AS aterm1,"
+            "  C1.place2 AS place2,"
+            "  C1.gradc2 AS gradc2,"
+            "  C1.field2 AS field2,"
+            "  C1.setup2 AS setup2,"
+            "  C1.aterm2 AS aterm2,"
+            "  C1.place3 AS place3,"
+            "  C1.gradc3 AS gradc3,"
+            "  C1.field3 AS field3,"
+            "  C1.setup3 AS setup3,"
+            "  C1.aterm3 AS aterm3 "
+            "FROM blob AS B1 CROSS JOIN("
+            "  SELECT "
+            "    B2.place AS place2,"
+            "    B2.gradc AS gradc2,"
+            "    B2.field AS field2,"
+            "    B2.setup AS setup2,"
+            "    B2.aterm AS aterm2,"
+            "    B3.place AS place3,"
+            "    B3.gradc AS gradc3,"
+            "    B3.field AS field3,"
+            "    B3.setup AS setup3,"
+            "    B3.aterm AS aterm3"
+            "  FROM blob AS B2 CROSS JOIN blob AS B3"
+            "  WHERE"
+            "    aterm2 = aterm3"
+            "    AND"
+            "    place2 = place3) AS C1 "
+            "WHERE"
+            "  aterm1 = ?"
+            "  AND"
+            "  aterm1 = aterm2"
+            "  AND"
+            "  place1 = place2"
+            "  AND"
+            "  setup1 REGEXP ?"
+            "  AND"
+            "  setup2 REGEXP ?"
+            "  AND"
+            "  setup3 REGEXP ?",
+            [
+                SEMESTER,
+                RE["HPW"]["4"]["A"],
+                RE["HPW"]["6"]["A"],
+                RE["HPW"]["6"]["A"]
+            ]
+        )
+
+        HPW16_P2 = cursor.execute(
+            "SELECT "
+            "  B1.place AS place1,"
+            "  B1.gradc AS gradc1,"
+            "  B1.field AS field1,"
+            "  B1.setup AS setup1,"
+            "  B1.aterm AS aterm1,"
+            "  C1.place2 AS place2,"
+            "  C1.gradc2 AS gradc2,"
+            "  C1.field2 AS field2,"
+            "  C1.setup2 AS setup2,"
+            "  C1.aterm2 AS aterm2,"
+            "  C1.place3 AS place3,"
+            "  C1.gradc3 AS gradc3,"
+            "  C1.field3 AS field3,"
+            "  C1.setup3 AS setup3,"
+            "  C1.aterm3 AS aterm3 "
+            "FROM blob AS B1 CROSS JOIN("
+            "  SELECT "
+            "    B2.place AS place2,"
+            "    B2.gradc AS gradc2,"
+            "    B2.field AS field2,"
+            "    B2.setup AS setup2,"
+            "    B2.aterm AS aterm2,"
+            "    B3.place AS place3,"
+            "    B3.gradc AS gradc3,"
+            "    B3.field AS field3,"
+            "    B3.setup AS setup3,"
+            "    B3.aterm AS aterm3"
+            "  FROM blob AS B2 CROSS JOIN blob AS B3"
+            "  WHERE"
+            "    aterm2 = aterm3"
+            "    AND"
+            "    place2 = place3) AS C1 "
+            "WHERE"
+            "  aterm1 = ?"
+            "  AND"
+            "  aterm1 = aterm2"
+            "  AND"
+            "  place1 = place2"
+            "  AND"
+            "  setup1 REGEXP ?"
+            "  AND"
+            "  setup2 REGEXP ?"
+            "  AND"
+            "  setup3 REGEXP ?",
+            [
+                SEMESTER,
+                RE["HPW"]["4"]["A"],
+                RE["HPW"]["6"]["A"],
+                RE["HPW"]["6"]["A"]
+            ]
+        ).fetchall()
+
+        HPW16 = HPW16_P1 + HPW16_P2
+
+        print(HPW16)
 
 
 if __name__ == "__main__":
