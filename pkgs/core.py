@@ -109,7 +109,7 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
             "  ) "
-            ") LIMIT 256;",
+            ") LIMIT 1024;",
             [code]
         ).fetchall()
         # }}}
@@ -159,7 +159,7 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP '^[0-9]{3}[mtn][0-9]{2}$'"
             "  ) "
-            ") LIMIT 256;",
+            ") LIMIT 1024;",
             [code]
         ).fetchall()
         # }}}
@@ -233,7 +233,7 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
             "  ) "
-            ") LIMIT 256;",
+            ") LIMIT 1024;",
             [code]
         ).fetchall()
         blob_2 = connection.execute(
@@ -280,7 +280,7 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP '^[0-9]{3}[mtn][0-9]{2}$'"
             "  ) "
-            ") LIMIT 256;",
+            ") LIMIT 1024;",
             [code]
         ).fetchall()
         blob = blob_1 + blob_2
@@ -355,7 +355,7 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP '^[0-9]{3}[mtn][0-9]{2}$'"
             "  ) "
-            ") LIMIT 256;",
+            ") LIMIT 1024;",
             [code]
         ).fetchall()
         # }}}
@@ -455,7 +455,7 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
             "  ) "
-            ") LIMIT 256;",
+            ") LIMIT 1024;",
             [code]
         ).fetchall()
         blob_2 = connection.execute(
@@ -526,7 +526,7 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP '^[0-9]{3}[mtn][0-9]{2}$'"
             "  ) "
-            ") LIMIT 256;",
+            ") LIMIT 1024;",
             [code]
         ).fetchall()
         blob = blob_1 + blob_2
