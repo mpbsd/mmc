@@ -62,10 +62,18 @@ def DIGITS(number):
 
 
 def BLOB(connection, profile):
-    code = PKEY(connection, "semestre", SEMESTER())
-    if profile == 8:
-        # HPW08 {{{
-        blob = connection.execute(
+    semester = PKEY(connection, "semestre", SEMESTER())
+    RE = {
+        # 4HPW {{{
+        "4HPW": r"^[0-9]{2}[mtn][0-9]{2}$",
+        # }}}
+        # 6HPW {{{
+        "6HPW": r"^[0-9]{3}[mtn][0-9]{2}$",
+        # }}}
+    }
+    QUERY = {
+        # 2BLOBS {{{
+        "2BLOBS": (
             "SELECT"
             "  B1.campus,"
             "  B1.curso,"
@@ -96,7 +104,7 @@ def BLOB(connection, profile):
             "    WHERE"
             "      h.x = B1.horario"
             "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
+            "      h.y REGEXP ?"
             "  )"
             "  AND"
             "  EXISTS ("
@@ -107,65 +115,13 @@ def BLOB(connection, profile):
             "    WHERE"
             "      h.x = B2.horario"
             "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
+            "      h.y REGEXP ?"
             "  ) "
-            ") LIMIT 1024;",
-            [code]
-        ).fetchall()
+            ") LIMIT 1024;"
+        ),
         # }}}
-    elif profile == 10:
-        # HPW10 {{{
-        blob = connection.execute(
-            "SELECT"
-            "  B1.campus,"
-            "  B1.curso,"
-            "  B1.disciplina,"
-            "  B1.horario,"
-            "  B1.semestre,"
-            "  B2.campus,"
-            "  B2.curso,"
-            "  B2.disciplina,"
-            "  B2.horario,"
-            "  B2.semestre "
-            "FROM"
-            "  blob AS B1 "
-            "JOIN"
-            "  blob AS B2 "
-            "ON"
-            "  B1.semestre = B2.semestre "
-            "WHERE ("
-            "  B1.semestre = ? "
-            "  AND"
-            "  B1.horario != B2.horario"
-            "  AND"
-            "  EXISTS ("
-            "    SELECT"
-            "      h.x"
-            "    FROM"
-            "      horario AS h"
-            "    WHERE"
-            "      h.x = B1.horario"
-            "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
-            "  )"
-            "  AND"
-            "  EXISTS ("
-            "    SELECT"
-            "      h.x"
-            "    FROM"
-            "      horario AS h"
-            "    WHERE"
-            "      h.x = B2.horario"
-            "      AND"
-            "      h.y REGEXP '^[0-9]{3}[mtn][0-9]{2}$'"
-            "  ) "
-            ") LIMIT 1024;",
-            [code]
-        ).fetchall()
-        # }}}
-    elif profile == 12:
-        # HPW12 {{{
-        blob_1 = connection.execute(
+        # 3BLOBS {{{
+        "3BLOBS": (
             "SELECT"
             "  B1.campus,"
             "  B1.curso,"
@@ -209,7 +165,7 @@ def BLOB(connection, profile):
             "    WHERE"
             "      h.x = B1.horario"
             "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
+            "      h.y REGEXP ?"
             "  )"
             "  AND"
             "  EXISTS("
@@ -220,7 +176,7 @@ def BLOB(connection, profile):
             "    WHERE"
             "      h.x = B2.horario"
             "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
+            "      h.y REGEXP ?"
             "  )"
             "  AND"
             "  EXISTS("
@@ -231,137 +187,13 @@ def BLOB(connection, profile):
             "    WHERE"
             "      h.x = B3.horario"
             "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
+            "      h.y REGEXP ?"
             "  ) "
-            ") LIMIT 1024;",
-            [code]
-        ).fetchall()
-        blob_2 = connection.execute(
-            "SELECT"
-            "  B1.campus,"
-            "  B1.curso,"
-            "  B1.disciplina,"
-            "  B1.horario,"
-            "  B1.semestre,"
-            "  B2.campus,"
-            "  B2.curso,"
-            "  B2.disciplina,"
-            "  B2.horario,"
-            "  B2.semestre "
-            "FROM"
-            "  blob AS B1 "
-            "JOIN"
-            "  blob AS B2 "
-            "ON"
-            "  B1.semestre = B2.semestre "
-            "WHERE ("
-            "  B1.semestre = ? "
-            "  AND"
-            "  B1.horario != B2.horario"
-            "  AND"
-            "  EXISTS ("
-            "    SELECT"
-            "      h.x"
-            "    FROM"
-            "      horario AS h"
-            "    WHERE"
-            "      h.x = B1.horario"
-            "      AND"
-            "      h.y REGEXP '^[0-9]{3}[mtn][0-9]{2}$'"
-            "  )"
-            "  AND"
-            "  EXISTS ("
-            "    SELECT"
-            "      h.x"
-            "    FROM"
-            "      horario AS h"
-            "    WHERE"
-            "      h.x = B2.horario"
-            "      AND"
-            "      h.y REGEXP '^[0-9]{3}[mtn][0-9]{2}$'"
-            "  ) "
-            ") LIMIT 1024;",
-            [code]
-        ).fetchall()
-        blob = blob_1 + blob_2
+            ") LIMIT 1024;"
+        ),
         # }}}
-    elif profile == 14:
-        # HPW14 {{{
-        blob = connection.execute(
-            "SELECT"
-            "  B1.campus,"
-            "  B1.curso,"
-            "  B1.disciplina,"
-            "  B1.horario,"
-            "  B1.semestre,"
-            "  B2.campus,"
-            "  B2.curso,"
-            "  B2.disciplina,"
-            "  B2.horario,"
-            "  B2.semestre,"
-            "  B3.campus,"
-            "  B3.curso,"
-            "  B3.disciplina,"
-            "  B3.horario,"
-            "  B3.semestre "
-            "FROM"
-            "  blob AS B1 "
-            "INNER JOIN"
-            "  blob AS B2 "
-            "ON"
-            "  B1.semestre = B2.semestre "
-            "INNER JOIN"
-            "  blob AS B3 "
-            "ON"
-            "  B2.semestre = B3.semestre "
-            "WHERE ("
-            "  B1.semestre = ?"
-            "  AND"
-            "  B1.horario != B2.horario"
-            "  AND"
-            "  B1.horario != B3.horario"
-            "  AND"
-            "  B2.horario != B3.horario"
-            "  AND"
-            "  EXISTS("
-            "    SELECT"
-            "      h.x"
-            "    FROM"
-            "      horario AS h"
-            "    WHERE"
-            "      h.x = B1.horario"
-            "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
-            "  )"
-            "  AND"
-            "  EXISTS("
-            "    SELECT"
-            "      h.x"
-            "    FROM"
-            "      horario AS h"
-            "    WHERE"
-            "      h.x = B2.horario"
-            "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
-            "  )"
-            "  AND"
-            "  EXISTS("
-            "    SELECT"
-            "      h.x"
-            "    FROM"
-            "      horario AS h"
-            "    WHERE"
-            "      h.x = B3.horario"
-            "      AND"
-            "      h.y REGEXP '^[0-9]{3}[mtn][0-9]{2}$'"
-            "  ) "
-            ") LIMIT 1024;",
-            [code]
-        ).fetchall()
-        # }}}
-    elif profile == 16:
-        # HPW16 {{{
-        blob_1 = connection.execute(
+        # 4BLOBS {{{
+        "4BLOBS": (
             "SELECT"
             "  B1.campus,"
             "  B1.curso,"
@@ -420,7 +252,7 @@ def BLOB(connection, profile):
             "    WHERE"
             "      h.x = B1.horario"
             "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
+            "      h.y REGEXP ?"
             "  )"
             "  AND"
             "  EXISTS("
@@ -431,7 +263,7 @@ def BLOB(connection, profile):
             "    WHERE"
             "      h.x = B2.horario"
             "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
+            "      h.y REGEXP ?"
             "  )"
             "  AND"
             "  EXISTS("
@@ -442,7 +274,7 @@ def BLOB(connection, profile):
             "    WHERE"
             "      h.x = B3.horario"
             "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
+            "      h.y REGEXP ?"
             "  )"
             "  AND"
             "  EXISTS("
@@ -453,81 +285,51 @@ def BLOB(connection, profile):
             "    WHERE"
             "      h.x = B4.horario"
             "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
+            "      h.y REGEXP ?"
             "  ) "
-            ") LIMIT 1024;",
-            [code]
+            ") LIMIT 1024;"
+        ),
+        # }}}
+    }
+    if profile == 8:
+        # 08HPW {{{
+        blob = connection.execute(
+            QUERY["2BLOBS"], [semester, RE["4HPW"], RE["4HPW"]]
+        ).fetchall()
+        # }}}
+    elif profile == 10:
+        # 10HPW {{{
+        blob = connection.execute(
+            QUERY["2BLOBS"], [semester, RE["4HPW"], RE["6HPW"]]
+        ).fetchall()
+        # }}}
+    elif profile == 12:
+        # 12HPW {{{
+        blob_1 = connection.execute(
+            QUERY["3BLOBS"],
+            [semester, RE["4HPW"], RE["4HPW"], RE["4HPW"]],
         ).fetchall()
         blob_2 = connection.execute(
-            "SELECT"
-            "  B1.campus,"
-            "  B1.curso,"
-            "  B1.disciplina,"
-            "  B1.horario,"
-            "  B1.semestre,"
-            "  B2.campus,"
-            "  B2.curso,"
-            "  B2.disciplina,"
-            "  B2.horario,"
-            "  B2.semestre,"
-            "  B3.campus,"
-            "  B3.curso,"
-            "  B3.disciplina,"
-            "  B3.horario,"
-            "  B3.semestre "
-            "FROM"
-            "  blob AS B1 "
-            "INNER JOIN"
-            "  blob AS B2 "
-            "ON"
-            "  B1.semestre = B2.semestre "
-            "INNER JOIN"
-            "  blob AS B3 "
-            "ON"
-            "  B2.semestre = B3.semestre "
-            "WHERE ("
-            "  B1.semestre = ?"
-            "  AND"
-            "  B1.horario != B2.horario"
-            "  AND"
-            "  B1.horario != B3.horario"
-            "  AND"
-            "  B2.horario != B3.horario"
-            "  AND"
-            "  EXISTS("
-            "    SELECT"
-            "      h.x"
-            "    FROM"
-            "      horario AS h"
-            "    WHERE"
-            "      h.x = B1.horario"
-            "      AND"
-            "      h.y REGEXP '^[0-9]{2}[mtn][0-9]{2}$'"
-            "  )"
-            "  AND"
-            "  EXISTS("
-            "    SELECT"
-            "      h.x"
-            "    FROM"
-            "      horario AS h"
-            "    WHERE"
-            "      h.x = B2.horario"
-            "      AND"
-            "      h.y REGEXP '^[0-9]{3}[mtn][0-9]{2}$'"
-            "  )"
-            "  AND"
-            "  EXISTS("
-            "    SELECT"
-            "      h.x"
-            "    FROM"
-            "      horario AS h"
-            "    WHERE"
-            "      h.x = B3.horario"
-            "      AND"
-            "      h.y REGEXP '^[0-9]{3}[mtn][0-9]{2}$'"
-            "  ) "
-            ") LIMIT 1024;",
-            [code]
+            QUERY["2BLOBS"], [semester, RE["6HPW"], RE["6HPW"]]
+        ).fetchall()
+        blob = blob_1 + blob_2
+        # }}}
+    elif profile == 14:
+        # 14HPW {{{
+        blob = connection.execute(
+            QUERY["3BLOBS"],
+            [semester, RE["4HPW"], RE["4HPW"], RE["6HPW"]],
+        ).fetchall()
+        # }}}
+    elif profile == 16:
+        # 16HPW {{{
+        blob_1 = connection.execute(
+            QUERY["4BLOBS"],
+            [semester, RE["4HPW"], RE["4HPW"], RE["4HPW"], RE["4HPW"]],
+        ).fetchall()
+        blob_2 = connection.execute(
+            QUERY["3BLOBS"],
+            [semester, RE["4HPW"], RE["6HPW"], RE["6HPW"]],
         ).fetchall()
         blob = blob_1 + blob_2
         # }}}
@@ -539,7 +341,7 @@ def BLOB(connection, profile):
 def main():
     with sqlite3.connect("data/sql/sqlite.db") as connection:
         connection.create_function("REGEXP", 2, REGEXP)
-        print(BLOB(connection, 16))
+        print(BLOB(connection, 8))
 
 
 if __name__ == "__main__":
