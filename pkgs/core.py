@@ -4,6 +4,7 @@
 import re
 import sqlite3
 from datetime import datetime
+from pkgs.conf import score
 
 
 def REGEXP(pattern, input):
@@ -62,7 +63,7 @@ def DIGITS(number):
 
 
 def BLOB(connection, profile):
-    semester = PKEY(connection, "semestre", SEMESTER())
+    pkey_semester = PKEY(connection, "semestre", SEMESTER())
     RE = {
         # 4HPW {{{
         "4HPW": r"^[0-9]{2}[mtn][0-9]{2}$",
@@ -117,7 +118,7 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP ?"
             "  ) "
-            ") LIMIT 1024;"
+            ") LIMIT 2048;"
         ),
         # }}}
         # 3BLOBS {{{
@@ -189,7 +190,7 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP ?"
             "  ) "
-            ") LIMIT 1024;"
+            ") LIMIT 2048;"
         ),
         # }}}
         # 4BLOBS {{{
@@ -287,30 +288,30 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP ?"
             "  ) "
-            ") LIMIT 1024;"
+            ") LIMIT 2048;"
         ),
         # }}}
     }
     if profile == 8:
         # 08HPW {{{
         blob = connection.execute(
-            QUERY["2BLOBS"], [semester, RE["4HPW"], RE["4HPW"]]
+            QUERY["2BLOBS"], [pkey_semester, RE["4HPW"], RE["4HPW"]]
         ).fetchall()
         # }}}
     elif profile == 10:
         # 10HPW {{{
         blob = connection.execute(
-            QUERY["2BLOBS"], [semester, RE["4HPW"], RE["6HPW"]]
+            QUERY["2BLOBS"], [pkey_semester, RE["4HPW"], RE["6HPW"]]
         ).fetchall()
         # }}}
     elif profile == 12:
         # 12HPW {{{
         blob_1 = connection.execute(
             QUERY["3BLOBS"],
-            [semester, RE["4HPW"], RE["4HPW"], RE["4HPW"]],
+            [pkey_semester, RE["4HPW"], RE["4HPW"], RE["4HPW"]],
         ).fetchall()
         blob_2 = connection.execute(
-            QUERY["2BLOBS"], [semester, RE["6HPW"], RE["6HPW"]]
+            QUERY["2BLOBS"], [pkey_semester, RE["6HPW"], RE["6HPW"]]
         ).fetchall()
         blob = blob_1 + blob_2
         # }}}
@@ -318,18 +319,18 @@ def BLOB(connection, profile):
         # 14HPW {{{
         blob = connection.execute(
             QUERY["3BLOBS"],
-            [semester, RE["4HPW"], RE["4HPW"], RE["6HPW"]],
+            [pkey_semester, RE["4HPW"], RE["4HPW"], RE["6HPW"]],
         ).fetchall()
         # }}}
     elif profile == 16:
         # 16HPW {{{
         blob_1 = connection.execute(
             QUERY["4BLOBS"],
-            [semester, RE["4HPW"], RE["4HPW"], RE["4HPW"], RE["4HPW"]],
+            [pkey_semester, RE["4HPW"], RE["4HPW"], RE["4HPW"], RE["4HPW"]],
         ).fetchall()
         blob_2 = connection.execute(
             QUERY["3BLOBS"],
-            [semester, RE["4HPW"], RE["6HPW"], RE["6HPW"]],
+            [pkey_semester, RE["4HPW"], RE["6HPW"], RE["6HPW"]],
         ).fetchall()
         blob = blob_1 + blob_2
         # }}}
@@ -338,10 +339,24 @@ def BLOB(connection, profile):
     return blob
 
 
+def SCORE(blob):
+    N = len(blob) // 5
+    S = 0
+    for i in range(N):
+        rank_campus = score["campus"][blob[i * 5]]["rank"]
+        rank_curso = score["curso"][blob[i * 5 + 1]]["rank"]
+        rank_disciplina = score["disciplina"][blob[i * 5 + 2]]["rank"]
+        rank_horario = score["horario"][blob[i * 5 + 3]]["rank"]
+        S += rank_campus + rank_curso + rank_disciplina + rank_horario
+    return S
+
+
 def main():
+
     with sqlite3.connect("data/sql/sqlite.db") as connection:
         connection.create_function("REGEXP", 2, REGEXP)
-        print(BLOB(connection, 8))
+        blob = BLOB(connection, 16)
+        print(sorted(blob, key=SCORE))
 
 
 if __name__ == "__main__":
