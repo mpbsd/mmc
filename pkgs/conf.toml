@@ -1,0 +1,615 @@
+[campus]
+
+[campus.colemar]
+pkey = 1
+rank = 0
+
+[campus.samambaia]
+pkey = 2
+rank = 1
+
+[campus.aparecida]
+pkey = 3
+rank = -1
+
+[curso]
+
+[curso.administracao]
+pkey = 1
+rank = 0
+
+[curso.agronomia]
+pkey = 2
+rank = 0
+
+[curso.arquitetura]
+pkey = 3
+rank = 0
+
+[curso.biomedicina]
+pkey = 4
+rank = 0
+
+[curso.biotecnologia]
+pkey = 5
+rank = 0
+
+[curso."ciencia da computacao"]
+pkey = 6
+rank = 0
+
+[curso."ciencias ambientais"]
+pkey = 7
+rank = 0
+
+[curso."ciencias biologicas"]
+pkey = 8
+rank = 0
+
+[curso."ciencias contabeis"]
+pkey = 9
+rank = 0
+
+[curso."ciencias economicas"]
+pkey = 10
+rank = 0
+
+[curso."comunicacao social"]
+pkey = 11
+rank = 0
+
+[curso."engenharia ambiental"]
+pkey = 12
+rank = 0
+
+[curso."engenharia civil"]
+pkey = 13
+rank = 0
+
+[curso."engenharia de alimentos"]
+pkey = 14
+rank = 0
+
+[curso."engenharia de computacao"]
+pkey = 15
+rank = 0
+
+[curso."engenharia de materiais"]
+pkey = 16
+rank = 0
+
+[curso."engenharia de producao"]
+pkey = 17
+rank = 0
+
+[curso."engenharia de software"]
+pkey = 18
+rank = 0
+
+[curso."engenharia de transportes"]
+pkey = 19
+rank = 0
+
+[curso."engenharia eletrica"]
+pkey = 20
+rank = 0
+
+[curso."engenharia florestal"]
+pkey = 21
+rank = 0
+
+[curso."engenharia fisica"]
+pkey = 22
+rank = 0
+
+[curso."engenharia mecanica"]
+pkey = 23
+rank = 0
+
+[curso."engenharia quimica"]
+pkey = 24
+rank = 0
+
+[curso.estatistica]
+pkey = 25
+rank = 0
+
+[curso.farmacia]
+pkey = 26
+rank = 0
+
+[curso.fisioterapia]
+pkey = 27
+rank = 0
+
+[curso."fisica bacharelado"]
+pkey = 28
+rank = 0
+
+[curso."fisica licenciatura"]
+pkey = 29
+rank = 0
+
+[curso.geologia]
+pkey = 30
+rank = 0
+
+[curso."gestao da informacao"]
+pkey = 31
+rank = 0
+
+[curso."instituto de fisica"]
+pkey = 32
+rank = 0
+
+[curso."instituto de quimica"]
+pkey = 33
+rank = 0
+
+[curso."inteligencia artificial"]
+pkey = 34
+rank = 0
+
+[curso.matematica]
+pkey = 35
+rank = 0
+
+[curso.medicina]
+pkey = 36
+rank = 0
+
+[curso.nutricao]
+pkey = 37
+rank = 0
+
+[curso.psicologia]
+pkey = 38
+rank = 0
+
+[curso."quimica bacharelado"]
+pkey = 39
+rank = 0
+
+[curso."quimica licenciatura"]
+pkey = 40
+rank = 0
+
+[curso."relacoes internacionais"]
+pkey = 41
+rank = 0
+
+[curso."relacoes publicas"]
+pkey = 42
+rank = 0
+
+[curso."sistemas de informacao"]
+pkey = 43
+rank = 0
+
+[curso.zootecnia]
+pkey = 44
+rank = 0
+
+[disciplina]
+
+[disciplina."algebra linear"]
+pkey = 1
+rank = 1
+
+[disciplina."algebra linear 2"]
+pkey = 2
+rank = 1
+
+[disciplina."algebra linear i"]
+pkey = 3
+rank = 1
+
+[disciplina."analise real"]
+pkey = 4
+rank = 1
+
+[disciplina."analise real 2"]
+pkey = 5
+rank = 1
+
+[disciplina."analise real 1"]
+pkey = 6
+rank = 1
+
+[disciplina.bioestatistica]
+pkey = 7
+rank = -1
+
+[disciplina."bioestatistica 1"]
+pkey = 8
+rank = -1
+
+[disciplina."bioestatistica 2"]
+pkey = 9
+rank = -1
+
+[disciplina."calculo 1a"]
+pkey = 10
+rank = 1
+
+[disciplina."calculo 1b"]
+pkey = 11
+rank = 0
+
+[disciplina."calculo 1c"]
+pkey = 12
+rank = 0
+
+[disciplina."calculo 2a"]
+pkey = 13
+rank = 1
+
+[disciplina."calculo 2b"]
+pkey = 14
+rank = 0
+
+[disciplina."calculo 3"]
+pkey = 15
+rank = 1
+
+[disciplina."calculo 3a"]
+pkey = 16
+rank = 1
+
+[disciplina."calculo 3b"]
+pkey = 17
+rank = 0
+
+[disciplina."calculo diferencial"]
+pkey = 18
+rank = 1
+
+[disciplina."calculo integral"]
+pkey = 19
+rank = 1
+
+[disciplina."calculo numerico"]
+pkey = 20
+rank = 1
+
+[disciplina."calculo vetorial"]
+pkey = 21
+rank = 1
+
+[disciplina.edo]
+pkey = 22
+rank = 1
+
+[disciplina."educacao matematica inclusiva"]
+pkey = 23
+rank = -1
+
+[disciplina."equacoes diferenciais parciais"]
+pkey = 24
+rank = 0
+
+[disciplina.estatistica]
+pkey = 25
+rank = 0
+
+[disciplina."estatistica 1"]
+pkey = 26
+rank = 0
+
+[disciplina."estatistica 2"]
+pkey = 27
+rank = 0
+
+[disciplina."estatistica descritiva e probabilidade"]
+pkey = 28
+rank = 0
+
+[disciplina."estatistica i"]
+pkey = 29
+rank = 0
+
+[disciplina."estatistica ii"]
+pkey = 30
+rank = 0
+
+[disciplina."estatistica inferencial"]
+pkey = 31
+rank = 0
+
+[disciplina."fundamentos de analise"]
+pkey = 32
+rank = 1
+
+[disciplina."geometria analitica"]
+pkey = 33
+rank = 1
+
+[disciplina."geometria diferencial"]
+pkey = 34
+rank = 1
+
+[disciplina."geometria espacial"]
+pkey = 35
+rank = -1
+
+[disciplina.inferencia]
+pkey = 36
+rank = -1
+
+[disciplina."introducao a analise no rn"]
+pkey = 37
+rank = 1
+
+[disciplina."introducao a estatistica"]
+pkey = 38
+rank = 1
+
+[disciplina."introducao a probabilidade"]
+pkey = 39
+rank = 1
+
+[disciplina."introducao a teoria qualitativa das edos"]
+pkey = 40
+rank = 1
+
+[disciplina."matematica discreta"]
+pkey = 41
+rank = 0
+
+[disciplina."matematica financeira"]
+pkey = 42
+rank = 0
+
+[disciplina."nocoes de atuaria"]
+pkey = 43
+rank = -1
+
+[disciplina.probabilidade]
+pkey = 44
+rank = 0
+
+[disciplina."probabilidade e estatistica"]
+pkey = 45
+rank = 0
+
+[disciplina."probabilidade e estatistica a"]
+pkey = 46
+rank = 0
+
+[disciplina."probabilidade e estatistica b"]
+pkey = 47
+rank = 0
+
+[disciplina."teoria de grupos"]
+pkey = 48
+rank = 1
+
+[horario]
+
+[horario.246m12]
+pkey = 1
+rank = 1
+
+[horario.246m23]
+pkey = 2
+rank = 1
+
+[horario.246m34]
+pkey = 3
+rank = 1
+
+[horario.246m45]
+pkey = 4
+rank = 1
+
+[horario.246n23]
+pkey = 5
+rank = -1
+
+[horario.246n45]
+pkey = 6
+rank = -1
+
+[horario.246t12]
+pkey = 7
+rank = 0
+
+[horario.246t23]
+pkey = 8
+rank = 0
+
+[horario.246t34]
+pkey = 9
+rank = 0
+
+[horario.246t45]
+pkey = 10
+rank = 0
+
+[horario.246t56]
+pkey = 11
+rank = 0
+
+[horario.24m12]
+pkey = 12
+rank = 1
+
+[horario.24m23]
+pkey = 13
+rank = 1
+
+[horario.24m34]
+pkey = 14
+rank = 1
+
+[horario.24m45]
+pkey = 15
+rank = 1
+
+[horario.24m56]
+pkey = 16
+rank = 1
+
+[horario.24n23]
+pkey = 17
+rank = 0
+
+[horario.24n45]
+pkey = 18
+rank = 0
+
+[horario.24t12]
+pkey = 19
+rank = 0
+
+[horario.24t23]
+pkey = 20
+rank = 0
+
+[horario.24t34]
+pkey = 21
+rank = 0
+
+[horario.24t45]
+pkey = 22
+rank = 0
+
+[horario.24t56]
+pkey = 23
+rank = 0
+
+[horario.25t23]
+pkey = 24
+rank = 0
+
+[horario.25t45]
+pkey = 25
+rank = 0
+
+[horario.35m12]
+pkey = 26
+rank = 1
+
+[horario.35m23]
+pkey = 27
+rank = 1
+
+[horario.35m34]
+pkey = 28
+rank = 1
+
+[horario.35m45]
+pkey = 29
+rank = 1
+
+[horario.35m56]
+pkey = 30
+rank = 1
+
+[horario.35n23]
+pkey = 31
+rank = 0
+
+[horario.35n34]
+pkey = 32
+rank = 0
+
+[horario.35n45]
+pkey = 33
+rank = 0
+
+[horario.35t12]
+pkey = 34
+rank = 0
+
+[horario.35t23]
+pkey = 35
+rank = 0
+
+[horario.35t34]
+pkey = 36
+rank = 0
+
+[horario.35t45]
+pkey = 37
+rank = 0
+
+[horario.35t56]
+pkey = 38
+rank = 0
+
+[horario.36t23]
+pkey = 39
+rank = 0
+
+[horario.46m12]
+pkey = 40
+rank = 1
+
+[horario.46m23]
+pkey = 41
+rank = 1
+
+[horario.46m34]
+pkey = 42
+rank = 1
+
+[horario.46m45]
+pkey = 43
+rank = 1
+
+[horario.46m56]
+pkey = 44
+rank = 1
+
+[horario.46n23]
+pkey = 45
+rank = 0
+
+[horario.46n45]
+pkey = 46
+rank = 0
+
+[horario.46t23]
+pkey = 47
+rank = 0
+
+[horario.46t34]
+pkey = 48
+rank = 0
+
+[horario.46t45]
+pkey = 49
+rank = 0
+
+[horario.46t56]
+pkey = 50
+rank = 0
+
+[horario.4t12]
+pkey = 51
+rank = 0
+
+[horario.56t23]
+pkey = 52
+rank = 0
+
+[horario.5n45]
+pkey = 53
+rank = -1
+
+[horario.6m123]
+pkey = 54
+rank = -1
+
+[horario.6m23]
+pkey = 55
+rank = -1
+
+[horario.6n23]
+pkey = 56
+rank = -1
+
+[horario.6t12]
+pkey = 57
+rank = -1

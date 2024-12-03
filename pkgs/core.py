@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import tomllib
 import re
 import sqlite3
 from datetime import datetime
-from pkgs.conf import score
+
+# from pkgs.conf import score
 
 
 def REGEXP(pattern, input):
@@ -351,12 +353,41 @@ def SCORE(blob):
     return S
 
 
+def DECODE(connection, blob):
+    N = len(blob) // 5
+    X = []
+    for i in range(N):
+        campus = NAME(connection, "campus", blob[i * 5])
+        curso = NAME(connection, "curso", blob[i * 5 + 1])
+        disciplina = NAME(connection, "disciplina", blob[i * 5 + 2])
+        horario = NAME(connection, "horario", blob[i * 5 + 3])
+        X.append(campus)
+        X.append(curso)
+        X.append(disciplina)
+        X.append(horario)
+    return X
+
+
 def main():
 
-    with sqlite3.connect("data/sql/sqlite.db") as connection:
-        connection.create_function("REGEXP", 2, REGEXP)
-        blob = BLOB(connection, 16)
-        print(sorted(blob, key=SCORE))
+    # with sqlite3.connect("data/sql/sqlite.db") as connection:
+    #     connection.create_function("REGEXP", 2, REGEXP)
+
+    #     blob = BLOB(connection, 12)
+
+    #     with open("unsorted.txt", "w") as unsorted_results:
+    #         for b in blob:
+    #             print(DECODE(connection, b), file=unsorted_results)
+
+    #     blob = sorted(blob, key=SCORE, reverse=True)
+
+    #     with open("sorted.txt", "w") as sorted_results:
+    #         for b in blob:
+    #             print(DECODE(connection, b), file=sorted_results)
+
+    with open("pkgs/conf.toml", "rb") as tomlfile:
+        toml = tomllib.load(tomlfile)
+        print(toml)
 
 
 if __name__ == "__main__":
