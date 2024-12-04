@@ -360,10 +360,8 @@ def DECODE(connection, blob):
         curso = NAME(connection, "curso", blob[i * 5 + 1])
         disciplina = NAME(connection, "disciplina", blob[i * 5 + 2])
         horario = NAME(connection, "horario", blob[i * 5 + 3])
-        X.append(campus)
-        X.append(curso)
-        X.append(disciplina)
-        X.append(horario)
+        semestre = NAME(connection, "semestre", blob[i * 5 + 4])
+        X.append((campus, curso, disciplina, horario, semestre))
     return X
 
 
@@ -385,7 +383,7 @@ def main():
                         pkey = PKEY(connection, table, entry)
                         score[table][pkey] = toml_file[table][entry]["score"]
 
-        blob = BLOB(connection, 10)
+        blob = BLOB(connection, 8)
 
         with open("unsorted.txt", "w") as unsorted_results:
             for b in blob:
