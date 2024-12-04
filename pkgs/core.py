@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import tomllib
 import re
 import sqlite3
+import tomllib
 from datetime import datetime
-
-# from pkgs.conf import score
+from pathlib import Path
 
 
 def REGEXP(pattern, input):
@@ -341,15 +340,15 @@ def BLOB(connection, profile):
     return blob
 
 
-def SCORE(blob):
+def RANK(score, blob):
     N = len(blob) // 5
     S = 0
     for i in range(N):
-        rank_campus = score["campus"][blob[i * 5]]["rank"]
-        rank_curso = score["curso"][blob[i * 5 + 1]]["rank"]
-        rank_disciplina = score["disciplina"][blob[i * 5 + 2]]["rank"]
-        rank_horario = score["horario"][blob[i * 5 + 3]]["rank"]
-        S += rank_campus + rank_curso + rank_disciplina + rank_horario
+        score_campus = score["campus"][blob[i * 5]]
+        score_curso = score["curso"][blob[i * 5 + 1]]
+        score_disciplina = score["disciplina"][blob[i * 5 + 2]]
+        score_horario = score["horario"][blob[i * 5 + 3]]
+        S += score_campus + score_curso + score_disciplina + score_horario
     return S
 
 
@@ -370,24 +369,33 @@ def DECODE(connection, blob):
 
 def main():
 
-    # with sqlite3.connect("data/sql/sqlite.db") as connection:
-    #     connection.create_function("REGEXP", 2, REGEXP)
+    data = "data/sql/sqlite.db"
+    conf = "pkgs/conf.toml"
 
-    #     blob = BLOB(connection, 12)
+    with sqlite3.connect(data) as connection:
+        connection.create_function("REGEXP", 2, REGEXP)
 
-    #     with open("unsorted.txt", "w") as unsorted_results:
-    #         for b in blob:
-    #             print(DECODE(connection, b), file=unsorted_results)
+        if Path(conf).is_file:
+            with open(conf, "rb") as raw_toml_file:
+                toml_file = tomllib.load(raw_toml_file)
+                score = {}
+                for table in toml_file.keys():
+                    score[table] = {}
+                    for entry in toml_file[table].keys():
+                        pkey = PKEY(connection, table, entry)
+                        score[table][pkey] = toml_file[table][entry]["score"]
 
-    #     blob = sorted(blob, key=SCORE, reverse=True)
+        blob = BLOB(connection, 10)
 
-    #     with open("sorted.txt", "w") as sorted_results:
-    #         for b in blob:
-    #             print(DECODE(connection, b), file=sorted_results)
+        with open("unsorted.txt", "w") as unsorted_results:
+            for b in blob:
+                print(DECODE(connection, b), file=unsorted_results)
 
-    with open("pkgs/conf.toml", "rb") as tomlfile:
-        toml = tomllib.load(tomlfile)
-        print(toml)
+        blob = sorted(blob, key=lambda b: RANK(score, b), reverse=True)
+
+        with open("sorted.txt", "w") as sorted_results:
+            for b in blob:
+                print(DECODE(connection, b), file=sorted_results)
 
 
 if __name__ == "__main__":
