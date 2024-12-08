@@ -54,6 +54,8 @@ def BLOB(connection, profile):
             "WHERE ("
             "  B1.semestre = ? "
             "  AND"
+            "  B1.campus = B2.campus"
+            "  AND"
             "  B1.horario != B2.horario"
             "  AND"
             "  EXISTS ("
@@ -110,6 +112,10 @@ def BLOB(connection, profile):
             "  B2.semestre = B3.semestre "
             "WHERE ("
             "  B1.semestre = ?"
+            "  AND"
+            "  B1.campus = B2.campus"
+            "  AND"
+            "  B2.campus = B3.campus"
             "  AND"
             "  B1.horario != B2.horario"
             "  AND"
@@ -191,6 +197,12 @@ def BLOB(connection, profile):
             "  B3.semestre = B4.semestre "
             "WHERE ("
             "  B1.semestre = ?"
+            "  AND"
+            "  B1.campus = B2.campus"
+            "  AND"
+            "  B2.campus = B3.campus"
+            "  AND"
+            "  B3.campus = B4.campus"
             "  AND"
             "  B1.horario != B2.horario"
             "  AND"
@@ -354,12 +366,6 @@ def OVERLAPPING_CLASSES(connection, blob):
     return True if (B == 0) else False
 
 
-def SAME_CAMPUS(blob):
-    N = len(blob) // 5
-    L = len(set([blob[i * 5] for i in range(N)]))
-    return True if (L == 1) else False
-
-
 def REPEATING_DISCIPLINES(blob):
     N = len(blob) // 5
     L = len(set([blob[i * 5 + 2] for i in range(N)]))
@@ -404,8 +410,7 @@ def RANK(connection, score, blob):
         S += SCORE(score, "curso", blob[i * 5 + 1])
         S += SCORE(score, "disciplina", blob[i * 5 + 2])
         S += SCORE(score, "horario", blob[i * 5 + 3])
-    S += 2 if SAME_CAMPUS(blob) else 0
-    S += 2 if REPEATING_DISCIPLINES(blob) else 0
+    S += 1 if REPEATING_DISCIPLINES(blob) else 0
     S += 1 if RECURRING_DAYS(connection, blob) else 0
     S += 1 if CONTIGUOUS_CLASSES(connection, blob) else 0
     return S / N
@@ -475,7 +480,10 @@ def main():
 
         with open("sorted.txt", "w") as sorted_results:
             for b in blob:
-                print(DECODE(connection, b), file=sorted_results)
+                print(
+                    DECODE(connection, b),
+                    file=sorted_results,
+                )
 
 
 if __name__ == "__main__":
