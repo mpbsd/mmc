@@ -6,38 +6,19 @@ import sqlite3
 import sys
 import tomllib
 from datetime import datetime
+from itertools import combinations
 from pathlib import Path
+
+
+def SEMESTER():
+    Y = datetime.today().strftime("%Y")
+    M = datetime.today().strftime("%m")
+    return f"{Y}_1" if int(M) < 7 else f"{Y}_2"
 
 
 def REGEXP(pattern, input):
     regexp = re.compile(pattern)
     return bool(regexp.match(input))
-
-
-def SEMESTER():
-    A = datetime.today().strftime("%Y")
-    M = datetime.today().strftime("%m")
-    return f"{A}_1" if int(M) < 7 else f"{A}_2"
-
-
-def PKEY(connection, table, name):
-    pkey = None
-    if table in ["campus", "curso", "disciplina", "horario", "semestre"]:
-        query = f"SELECT x FROM '{table}' WHERE y = '{name}'"
-        response = connection.execute(query).fetchone()
-        if response is not None:
-            pkey = response[0]
-    return pkey
-
-
-def NAME(connection, table, pkey):
-    name = None
-    if table in ["campus", "curso", "disciplina", "horario", "semestre"]:
-        query = f"SELECT y FROM '{table}' WHERE x = '{pkey}'"
-        response = connection.execute(query).fetchone()
-        if response is not None:
-            name = response[0]
-    return name
 
 
 def BLOB(connection, profile):
@@ -96,7 +77,7 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP ?"
             "  ) "
-            ") LIMIT 2048;"
+            ") LIMIT 4096;"
         ),
         # }}}
         # 3BLOBS {{{
@@ -168,7 +149,7 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP ?"
             "  ) "
-            ") LIMIT 2048;"
+            ") LIMIT 4096;"
         ),
         # }}}
         # 4BLOBS {{{
@@ -266,7 +247,7 @@ def BLOB(connection, profile):
             "      AND"
             "      h.y REGEXP ?"
             "  ) "
-            ") LIMIT 2048;"
+            ") LIMIT 4096;"
         ),
         # }}}
     }
@@ -317,20 +298,24 @@ def BLOB(connection, profile):
     return blob
 
 
-def FETCH_TIMETABLE_COMPONENTS(connection, pkey_timetable):
-    re_timetable = re.compile(r"^([2-6]{1,3})([mtn])([1-6]{1,3})$", re.I)
-    timetable = NAME(connection, "horario", pkey_timetable)
-    components = None
-    if (timetable is not None) and (re_timetable.match(timetable) is not None):
-        components = re_timetable.match(timetable).groups()
-    return components
+def PKEY(connection, table, name):
+    pkey = None
+    if table in ["campus", "curso", "disciplina", "horario", "semestre"]:
+        query = f"SELECT x FROM '{table}' WHERE y = '{name}'"
+        response = connection.execute(query).fetchone()
+        if response is not None:
+            pkey = response[0]
+    return pkey
 
 
-def FETCH_HOURS_PER_WEEK(connection, pkey_timetable):
-    C = FETCH_TIMETABLE_COMPONENTS(connection, pkey_timetable)
-    M = len(C[0])
-    N = len(C[2])
-    return M * N
+def NAME(connection, table, pkey):
+    name = None
+    if table in ["campus", "curso", "disciplina", "horario", "semestre"]:
+        query = f"SELECT y FROM '{table}' WHERE x = '{pkey}'"
+        response = connection.execute(query).fetchone()
+        if response is not None:
+            name = response[0]
+    return name
 
 
 def DIGITS(number):
@@ -341,44 +326,69 @@ def DIGITS(number):
     return digits
 
 
-def DISCIPLINES_TAKE_PLACE_IN_A_SINGLE_CAMPUS(blob):
+def COMPONENTS(connection, pkey_timetable):
+    re_timetable = re.compile(r"^([2-6]{1,3})([mtn])([1-6]{1,3})$", re.I)
+    timetable = NAME(connection, "horario", pkey_timetable)
+    components = None
+    if (timetable is not None) and (re_timetable.match(timetable) is not None):
+        CMP = re_timetable.match(timetable).groups()
+        components = (sorted(DIGITS(CMP[0])), CMP[1], sorted(DIGITS(CMP[2])))
+    return components
+
+
+def HOURS_PER_WEEK(connection, pkey_timetable):
+    C = COMPONENTS(connection, pkey_timetable)
+    return len(C[0]) * len(C[1])
+
+
+def OVERLAPPING_CLASSES(connection, blob):
     N = len(blob) // 5
-    B = True if len(set([blob[i * 5] for i in range(N)])) == 1 else False
-    return B
+    T = [COMPONENTS(connection, blob[i * 5 + 3]) for i in range(N)]
+    B = 1
+    for t1, t2 in combinations(T, 2):
+        C0 = len([d for d in t1[0] if d in t2[0]]) > 0
+        C1 = t1[1] == t2[1]
+        C2 = len([h for h in t1[2] if h in t2[2]]) > 0
+        if C0 and C1 and C2:
+            B *= 0
+    return True if (B == 0) else False
 
 
-def DISCIPLINES_ARE_THE_SAME(blob):
+def SAME_CAMPUS(blob):
     N = len(blob) // 5
-    B = True if len(set([blob[i * 5 + 2] for i in range(N)])) == 1 else False
-    return B
+    L = len(set([blob[i * 5] for i in range(N)]))
+    return True if (L == 1) else False
 
 
-def DISCIPLINES_ARE_CONTIGUOUS(connection, blob):
+def REPEATING_DISCIPLINES(blob):
     N = len(blob) // 5
-    T = sorted(
-        [
-            FETCH_TIMETABLE_COMPONENTS(connection, blob[i * 5 + 3])
-            for i in range(N)
-        ],
-        key=lambda x: x[2],
-    )
-    if N > 1:
-        B0 = 1
-        for i in range(N - 1):
-            if (T[i][0] == T[i + 1][0]) and (T[i][1] == T[i + 1][1]):
-                D1 = DIGITS(T[i][2])
-                D2 = DIGITS(T[i + 1][2])
-                if D1[-1] + 1 == D2[0]:
-                    B0 *= 1
-                else:
-                    B0 *= 0
-        B = True if (B0 == 1) else False
-    else:
-        B = True
-    return T, B
+    L = len(set([blob[i * 5 + 2] for i in range(N)]))
+    return True if (L < N) else False
 
 
-# the default value of an option not found in pkgs/conf.toml is 0
+def RECURRING_DAYS(connection, blob):
+    N = len(blob) // 5
+    T = [COMPONENTS(connection, blob[i * 5 + 3]) for i in range(N)]
+    B = 1
+    for t1, t2 in combinations(T, 2):
+        if (t1[0] <= t2[0] or t2[0] <= t1[0]) is False:
+            B *= 0
+    return True if (B == 1) else False
+
+
+def CONTIGUOUS_CLASSES(connection, blob):
+    N = len(blob) // 5
+    T = [COMPONENTS(connection, blob[i * 5 + 3]) for i in range(N)]
+    B = 1
+    for t1, t2 in combinations(T, 2):
+        C0 = len([d for d in t1[0] if d in t2[0]]) > 0
+        C1 = t1[1] == t2[1]
+        C2 = (t1[2][-1] == t2[2][0] - 1) or (t2[2][-1] == t1[2][0] - 1)
+        if (C0 and C1 and C2) is False:
+            B *= 0
+    return True if (B == 1) else False
+
+
 def SCORE(score, table, field):
     S = 0
     if (table in score.keys()) and (field in score[table].keys()):
@@ -390,17 +400,14 @@ def RANK(connection, score, blob):
     N = len(blob) // 5
     S = 0
     for i in range(N):
-        score_campus = SCORE(score, "campus", blob[i * 5])
-        score_curso = SCORE(score, "curso", blob[i * 5 + 1])
-        score_disciplina = SCORE(score, "disciplina", blob[i * 5 + 2])
-        score_horario = SCORE(score, "horario", blob[i * 5 + 3])
-        S += score_campus + score_curso + score_disciplina + score_horario
-    if DISCIPLINES_TAKE_PLACE_IN_A_SINGLE_CAMPUS(blob) is True:
-        S += 1
-    if DISCIPLINES_ARE_THE_SAME(blob) is True:
-        S += 1
-    if DISCIPLINES_ARE_CONTIGUOUS(connection, blob) is True:
-        S += 1
+        S += SCORE(score, "campus", blob[i * 5])
+        S += SCORE(score, "curso", blob[i * 5 + 1])
+        S += SCORE(score, "disciplina", blob[i * 5 + 2])
+        S += SCORE(score, "horario", blob[i * 5 + 3])
+    S += 2 if SAME_CAMPUS(blob) else 0
+    S += 2 if REPEATING_DISCIPLINES(blob) else 0
+    S += 1 if RECURRING_DAYS(connection, blob) else 0
+    S += 1 if CONTIGUOUS_CLASSES(connection, blob) else 0
     return S / N
 
 
@@ -422,29 +429,48 @@ def main():
     data = "data/sql/sqlite.db"
     conf = "pkgs/conf.toml"
 
-    if not (Path(data).is_file() and Path(conf).is_file()):
+    if Path(data).is_file() is False:
         sys.exit(10)
+        sys.stderr(f"Database file not found: {data}")
+
+    if Path(conf).is_file() is False:
+        sys.exit(11)
+        sys.stderr(f"Config file not found: {conf}")
+
+    if len(sys.argv) != 3:
+        sys.exit(12)
+        sys.stderr("Incorrect function call: number of arguments must be 3")
+
+    if sys.argv[1] not in ["-p", "--profile"]:
+        sys.exit(13)
+        sys.stderr("First flag must be either '-p' or '--profile'")
+
+    if sys.argv[2] not in ["8", "10", "12", "14", "16"]:
+        sys.exit(14)
+        sys.stderr("Second flag must be either '8', '10', '12', '14' or '16'")
 
     with sqlite3.connect(data) as connection:
         connection.create_function("REGEXP", 2, REGEXP)
 
+        score = {}
+
         with open(conf, "rb") as raw_toml_file:
             toml_file = tomllib.load(raw_toml_file)
-            score = {}
             for table in toml_file.keys():
                 score[table] = {}
-                for entry in toml_file[table].keys():
-                    pkey = PKEY(connection, table, entry)
-                    score[table][pkey] = toml_file[table][entry]["score"]
-
-        blob = BLOB(connection, 12)
-
-        with open("unsorted.txt", "w") as unsorted_results:
-            for b in blob:
-                print(DECODE(connection, b), file=unsorted_results)
+                for field in toml_file[table].keys():
+                    pkey = PKEY(connection, table, field)
+                    priority = toml_file[table][field]["score"]
+                    score[table][pkey] = priority
 
         blob = sorted(
-            blob, key=lambda b: RANK(connection, score, b), reverse=True
+            [
+                B
+                for B in BLOB(connection, int(sys.argv[2]))
+                if OVERLAPPING_CLASSES(connection, B) is False
+            ],
+            key=lambda B: RANK(connection, score, B),
+            reverse=True,
         )
 
         with open("sorted.txt", "w") as sorted_results:
