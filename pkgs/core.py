@@ -3,6 +3,7 @@
 
 import re
 import sqlite3
+import sys
 import tomllib
 from datetime import datetime
 from pathlib import Path
@@ -342,7 +343,14 @@ def DIGITS(number):
 
 def DISCIPLINES_TAKE_PLACE_IN_A_SINGLE_CAMPUS(blob):
     N = len(blob) // 5
-    return True if len(set([blob[i * 5] for i in range(N)])) == 1 else False
+    B = True if len(set([blob[i * 5] for i in range(N)])) == 1 else False
+    return B
+
+
+def DISCIPLINES_ARE_THE_SAME(blob):
+    N = len(blob) // 5
+    B = True if len(set([blob[i * 5 + 2] for i in range(N)])) == 1 else False
+    return B
 
 
 def DISCIPLINES_ARE_CONTIGUOUS(connection, blob):
@@ -352,7 +360,7 @@ def DISCIPLINES_ARE_CONTIGUOUS(connection, blob):
             FETCH_TIMETABLE_COMPONENTS(connection, blob[i * 5 + 3])
             for i in range(N)
         ],
-        key=lambda x: x[2]
+        key=lambda x: x[2],
     )
     if N > 1:
         B0 = 1
@@ -360,7 +368,7 @@ def DISCIPLINES_ARE_CONTIGUOUS(connection, blob):
             if (T[i][0] == T[i + 1][0]) and (T[i][1] == T[i + 1][1]):
                 D1 = DIGITS(T[i][2])
                 D2 = DIGITS(T[i + 1][2])
-                if (D1[-1] + 1 == D2[0]):
+                if D1[-1] + 1 == D2[0]:
                     B0 *= 1
                 else:
                     B0 *= 0
@@ -370,16 +378,26 @@ def DISCIPLINES_ARE_CONTIGUOUS(connection, blob):
     return T, B
 
 
+# the default value of an option not found in pkgs/conf.toml is 0
+def SCORE(score, table, field):
+    S = 0
+    if (table in score.keys()) and (field in score[table].keys()):
+        S = score[table][field]
+    return S
+
+
 def RANK(connection, score, blob):
     N = len(blob) // 5
     S = 0
     for i in range(N):
-        score_campus = score["campus"][blob[i * 5]]
-        score_curso = score["curso"][blob[i * 5 + 1]]
-        score_disciplina = score["disciplina"][blob[i * 5 + 2]]
-        score_horario = score["horario"][blob[i * 5 + 3]]
+        score_campus = SCORE(score, "campus", blob[i * 5])
+        score_curso = SCORE(score, "curso", blob[i * 5 + 1])
+        score_disciplina = SCORE(score, "disciplina", blob[i * 5 + 2])
+        score_horario = SCORE(score, "horario", blob[i * 5 + 3])
         S += score_campus + score_curso + score_disciplina + score_horario
     if DISCIPLINES_TAKE_PLACE_IN_A_SINGLE_CAMPUS(blob) is True:
+        S += 1
+    if DISCIPLINES_ARE_THE_SAME(blob) is True:
         S += 1
     if DISCIPLINES_ARE_CONTIGUOUS(connection, blob) is True:
         S += 1
@@ -404,18 +422,20 @@ def main():
     data = "data/sql/sqlite.db"
     conf = "pkgs/conf.toml"
 
+    if not (Path(data).is_file() and Path(conf).is_file()):
+        sys.exit(10)
+
     with sqlite3.connect(data) as connection:
         connection.create_function("REGEXP", 2, REGEXP)
 
-        if Path(conf).is_file:
-            with open(conf, "rb") as raw_toml_file:
-                toml_file = tomllib.load(raw_toml_file)
-                score = {}
-                for table in toml_file.keys():
-                    score[table] = {}
-                    for entry in toml_file[table].keys():
-                        pkey = PKEY(connection, table, entry)
-                        score[table][pkey] = toml_file[table][entry]["score"]
+        with open(conf, "rb") as raw_toml_file:
+            toml_file = tomllib.load(raw_toml_file)
+            score = {}
+            for table in toml_file.keys():
+                score[table] = {}
+                for entry in toml_file[table].keys():
+                    pkey = PKEY(connection, table, entry)
+                    score[table][pkey] = toml_file[table][entry]["score"]
 
         blob = BLOB(connection, 12)
 
@@ -423,7 +443,9 @@ def main():
             for b in blob:
                 print(DECODE(connection, b), file=unsorted_results)
 
-        blob = sorted(blob, key=lambda b: RANK(connection, score, b), reverse=True)
+        blob = sorted(
+            blob, key=lambda b: RANK(connection, score, b), reverse=True
+        )
 
         with open("sorted.txt", "w") as sorted_results:
             for b in blob:
