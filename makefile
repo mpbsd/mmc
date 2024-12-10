@@ -1,5 +1,5 @@
 build:
-	python3 -m pkgs.core --profile 16
+	python3 -m pkgs.core --profile 12
 
 black:
 	isort pkgs/core.py

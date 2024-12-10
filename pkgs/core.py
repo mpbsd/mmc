@@ -436,23 +436,18 @@ def main():
 
     if Path(data).is_file() is False:
         sys.exit(10)
-        sys.stderr(f"Database file not found: {data}")
 
     if Path(conf).is_file() is False:
         sys.exit(11)
-        sys.stderr(f"Config file not found: {conf}")
 
     if len(sys.argv) != 3:
         sys.exit(12)
-        sys.stderr("Incorrect function call: number of arguments must be 3")
 
     if sys.argv[1] not in ["-p", "--profile"]:
         sys.exit(13)
-        sys.stderr("First flag must be either '-p' or '--profile'")
 
     if sys.argv[2] not in ["8", "10", "12", "14", "16"]:
         sys.exit(14)
-        sys.stderr("Second flag must be either '8', '10', '12', '14' or '16'")
 
     with sqlite3.connect(data) as connection:
         connection.create_function("REGEXP", 2, REGEXP)
@@ -465,7 +460,7 @@ def main():
                 score[table] = {}
                 for field in toml_file[table].keys():
                     pkey = PKEY(connection, table, field)
-                    priority = toml_file[table][field]["score"]
+                    priority = toml_file[table][field]
                     score[table][pkey] = priority
 
         blob = sorted(
