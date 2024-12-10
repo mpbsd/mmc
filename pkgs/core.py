@@ -460,8 +460,7 @@ def main():
                 score[table] = {}
                 for field in toml_file[table].keys():
                     pkey = PKEY(connection, table, field)
-                    priority = toml_file[table][field]
-                    score[table][pkey] = priority
+                    score[table][pkey] = toml_file[table][field]
 
         blob = sorted(
             [
