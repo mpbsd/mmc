@@ -115,11 +115,12 @@ CHOICE = [
 # }}}
 
 
-def main():
+def checkhealth(choice):
+    error = []
 
     # numero de configuracoes
     if len(CHOICE) < 8:
-        print("E necessario, no minimo, 8 configuracoes.")
+        error.append(10)
 
     X = []
 
@@ -131,35 +132,41 @@ def main():
 
     # repeticao de disciplinas
     if len(Y) < len(X):
-        print("Nao se deve repetir disciplinas")
+        error.append(11)
 
     # turno noturno
     if [y for y in Y if RE["N"].match(y[3])] == []:
-        print("Deve-se ter ao menos uma disciplina no periodo noturno")
+        error.append(12)
 
     # turnos distintos
-    Z = []
+    Z = {
+        "M": [RE["M"].match(y[3]).group(2) for y in Y if RE["M"].match(y[3])],
+        "T": [RE["T"].match(y[3]).group(2) for y in Y if RE["T"].match(y[3])],
+        "N": [RE["N"].match(y[3]).group(2) for y in Y if RE["N"].match(y[3])],
+    }
 
-    for y in Y:
-        if RE["M"].match(y[3]):
-            z = RE["M"].match(y[3]).group(2)
-            if z not in Z:
-                Z.append(z)
-        if RE["T"].match(y[3]):
-            z = RE["T"].match(y[3]).group(2)
-            if z not in Z:
-                Z.append(z)
-        if RE["N"].match(y[3]):
-            z = RE["N"].match(y[3]).group(2)
-            if z not in Z:
-                Z.append(z)
-
-    if len(Z) < 2:
-        print("Deve-se ter ao menos uma configuracao em turnos distintos")
+    if len([t for t in Z.keys() if Z[t] != []]):
+        error.append(13)
 
     # aparecida
     if [y for y in Y if y[0] == "aparecida"] == []:
-        print("Deve-se ter ao menos uma configuracao em aparecida")
+        error.append(14)
+
+    return error
+
+
+def main():
+
+    code = {
+        10: "Não há configurações em quantidade suficiente",
+        11: "Há disciplinas repetidas",
+        12: "Não há disciplinas no período noturno",
+        13: "Não há diversidade de turnos",
+        14: "Não há disciplinas em Aparecida de Goiânia",
+    }
+
+    print(checkhealth(CHOICE))
+
 
 
 if __name__ == "__main__":
