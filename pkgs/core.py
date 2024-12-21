@@ -11,9 +11,9 @@ from pathlib import Path
 
 
 def SEMESTER():
-    Y = datetime.today().strftime("%Y")
-    M = datetime.today().strftime("%m")
-    return f"{Y}_1" if int(M) < 7 else f"{Y}_2"
+    Y = int(datetime.today().strftime("%Y"))
+    M = int(datetime.today().strftime("%m"))
+    return f"{Y}_2" if (M <= 6) else f"{Y+1}_1"
 
 
 def REGEXP(pattern, input):
@@ -431,7 +431,7 @@ def DECODE(connection, blob):
 
 def main():
 
-    data = "data/sql/sqlite.db"
+    data = "data/sqlite.db"
     conf = "pkgs/conf.toml"
 
     if Path(data).is_file() is False:
