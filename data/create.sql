@@ -31,11 +31,11 @@ CREATE TABLE IF NOT EXISTS semestre(
 
 CREATE TABLE IF NOT EXISTS blob(
   campus INT NOT NULL,
-  disciplina INT NOT NULL,
   curso INT NOT NULL,
+  disciplina INT NOT NULL,
   horario INT NOT NULL,
   semestre INT NOT NULL,
-  PRIMARY KEY(campus, disciplina, curso, horario, semestre),
+  PRIMARY KEY(campus, curso, disciplina, horario, semestre),
   FOREIGN KEY(campus) REFERENCES campus(x) ON UPDATE CASCADE,
   FOREIGN KEY(curso) REFERENCES curso(x) ON UPDATE CASCADE,
   FOREIGN KEY(disciplina) REFERENCES disciplina(x) ON UPDATE CASCADE,

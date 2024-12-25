@@ -18,10 +18,10 @@ colemar   - edo                                    - engenharia eletrica       -
 colemar   - edo                                    - engenharia de computacao  - 24m56  - 2022_2
 colemar   - calculo 3a                             - engenharia eletrica       - 24m12  - 2022_2
 colemar   - calculo 3a                             - engenharia de computacao  - 24m34  - 2022_2
-colemar   - calculo numerico                       - engenharia da computacao  - 35m12  - 2022_2
+colemar   - calculo numerico                       - engenharia de computacao  - 35m12  - 2022_2
 colemar   - calculo numerico                       - engenharia eletrica       - 35m34  - 2022_2
 colemar   - geometria analitica                    - engenharia eletrica       - 35m12  - 2022_2
-colemar   - matematica discreta                    - engenharia da computacao  - 24m12  - 2022_2
+colemar   - matematica discreta                    - engenharia de computacao  - 24m12  - 2022_2
 colemar   - probabilidade e estatistica a          - engenharia civil          - 24m34  - 2022_2
 colemar   - calculo 2a                             - engenharia civil          - 246m12 - 2022_2
 colemar   - algebra linear                         - engenharia civil          - 24m56  - 2022_2

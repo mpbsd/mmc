@@ -38,39 +38,37 @@
 %s/;comunicacao social;/;11;/e
 %s/;engenharia ambiental;/;12;/e
 %s/;engenharia civil;/;13;/e
-%s/;engenharia da computacao;/;14;/e
-%s/;engenharia de alimentos;/;15;/e
-%s/;engenharia de computacao;/;16;/e
-%s/;engenharia de materiais;/;17;/e
-%s/;engenharia de producao;/;18;/e
-%s/;engenharia de software;/;19;/e
-%s/;engenharia de transporte;/;20;/e
-%s/;engenharia de transportes;/;21;/e
-%s/;engenharia eletrica;/;22;/e
-%s/;engenharia fisica;/;23;/e
-%s/;engenharia florestal;/;24;/e
-%s/;engenharia mecanica;/;25;/e
-%s/;engenharia quimica;/;26;/e
-%s/;estatistica;/;27;/e
-%s/;farmacia;/;28;/e
-%s/;fisica bacharelado;/;29;/e
-%s/;fisica licenciatura;/;30;/e
-%s/;fisioterapia;/;31;/e
-%s/;geologia;/;32;/e
-%s/;gestao da informacao;/;33;/e
-%s/;instituto de fisica;/;34;/e
-%s/;instituto de quimica;/;35;/e
-%s/;inteligencia artificial;/;36;/e
-%s/;matematica;/;37;/e
-%s/;medicina;/;38;/e
-%s/;nutricao;/;39;/e
-%s/;psicologia;/;40;/e
-%s/;quimica bacharelado;/;41;/e
-%s/;quimica licenciatura;/;42;/e
-%s/;relacoes internacionais;/;43;/e
-%s/;relacoes publicas;/;44;/e
-%s/;sistemas de informacao;/;45;/e
-%s/;zootecnia;/;46;/e
+%s/;engenharia de alimentos;/;14;/e
+%s/;engenharia de computacao;/;15;/e
+%s/;engenharia de materiais;/;16;/e
+%s/;engenharia de producao;/;17;/e
+%s/;engenharia de software;/;18;/e
+%s/;engenharia de transportes;/;19;/e
+%s/;engenharia eletrica;/;20;/e
+%s/;engenharia fisica;/;21;/e
+%s/;engenharia florestal;/;22;/e
+%s/;engenharia mecanica;/;23;/e
+%s/;engenharia quimica;/;24;/e
+%s/;estatistica;/;25;/e
+%s/;farmacia;/;26;/e
+%s/;fisica bacharelado;/;27;/e
+%s/;fisica licenciatura;/;28;/e
+%s/;fisioterapia;/;29;/e
+%s/;geologia;/;30;/e
+%s/;gestao da informacao;/;31;/e
+%s/;instituto de fisica;/;32;/e
+%s/;instituto de quimica;/;33;/e
+%s/;inteligencia artificial;/;34;/e
+%s/;matematica;/;35;/e
+%s/;medicina;/;36;/e
+%s/;nutricao;/;37;/e
+%s/;psicologia;/;38;/e
+%s/;quimica bacharelado;/;39;/e
+%s/;quimica licenciatura;/;40;/e
+%s/;relacoes internacionais;/;41;/e
+%s/;relacoes publicas;/;42;/e
+%s/;sistemas de informacao;/;43;/e
+%s/;zootecnia;/;44;/e
 %s/;algebra linear;/;01;/e
 %s/;algebra linear 1;/;02;/e
 %s/;algebra linear 2;/;03;/e
