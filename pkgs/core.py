@@ -57,6 +57,10 @@ def BLOB(connection, profile):
             "  )"
             "  AND"
             "  ("
+            "    B1.horario != B2.horario"
+            "  )"
+            "  AND"
+            "  ("
             "    B1.semestre = B2.semestre"
             "    AND"
             "    B2.semestre = ?"
@@ -117,6 +121,14 @@ def BLOB(connection, profile):
             "      AND"
             "      B3.campus = 3"
             "    )"
+            "  )"
+            "  AND"
+            "  ("
+            "    B1.horario != B2.horario"
+            "    AND"
+            "    B1.horario != B3.horario"
+            "    AND"
+            "    B2.horario != B3.horario"
             "  )"
             "  AND"
             "  ("
@@ -198,6 +210,20 @@ def BLOB(connection, profile):
             "      AND"
             "      B4.campus = 3"
             "    )"
+            "  )"
+            "  AND"
+            "  ("
+            "    B1.horario != B2.horario"
+            "    AND"
+            "    B1.horario != B3.horario"
+            "    AND"
+            "    B1.horario != B4.horario"
+            "    AND"
+            "    B2.horario != B3.horario"
+            "    AND"
+            "    B2.horario != B4.horario"
+            "    AND"
+            "    B3.horario != B4.horario"
             "  )"
             "  AND"
             "  ("
@@ -403,6 +429,8 @@ def SCORE(score, table, field):
     return S
 
 
+# TODO: add extra points for configurations in a single campus, if the campus is
+# either colemar (1) or samambaia (2)
 def RANK(connection, score, blob):
     N = len(blob) // 5
     S = 0

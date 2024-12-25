@@ -42,3 +42,17 @@ CREATE TABLE IF NOT EXISTS blob(
   FOREIGN KEY(horario) REFERENCES horario(x) ON UPDATE CASCADE,
   FOREIGN KEY(semestre) REFERENCES semestre(x) ON UPDATE CASCADE
 );
+
+.mode csv
+.separator ;
+
+.import csv/campus.csv campus
+.import csv/curso.csv curso
+.import csv/disciplina.csv disciplina
+.import csv/horario.csv horario
+.import csv/semestre.csv semestre
+.import csv/blob.csv blob
+
+.mode table
+
+select count(*) from blob;
