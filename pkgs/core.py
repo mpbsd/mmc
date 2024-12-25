@@ -132,17 +132,25 @@ def DECODE(conn: Conn, blob: Blob) -> list[tuple[str]]:
     return X
 
 
-def CAMPUSES_FROM_ALL_CONFIGURATIONS(blob: Blob) -> set:
+def CAMPUSES(blob: Blob) -> list[int]:
     N = len(blob) // f
-    return set([blob[i * f + F["campus"]] for i in range(N)])
+    C = []
+    for i in range(N):
+        c = blob[i * f + F["campus"]]
+        if c not in C:
+            C.append(c)
+    return sorted(C)
 
 
-def DISCIPLINES_FROM_ALL_BLOBS(blob: Blob) -> set:
+def DISCIPLINES(blob: Blob) -> list[Blob]:
     N = len(blob) // f
-    return set([blob[i * f + F["disciplina"]] for i in range(N)])
+    D = []
+    for i in range(N):
+        D.append(blob[i * f + F["campus"] : i * f + F["semestre"]])
+    return D
 
 
-def DAY_PERIOD_FROM_ALL_CONFIGURATIONS(conn: Conn, blob: Blob) -> list[str]:
+def PERIOD_OF_THE_DAY(conn: Conn, blob: Blob) -> list[str]:
     N = len(blob) // f
     D = []
     for i in range(N):
@@ -153,30 +161,30 @@ def DAY_PERIOD_FROM_ALL_CONFIGURATIONS(conn: Conn, blob: Blob) -> list[str]:
     return D
 
 
-def NON_REPEATING_DISCIPLINES(blob):
-    N = len(blob) // 5
-    M = len(set([blob[i * 5 : i * 5 + 5] for i in range(N)]))
-    return M == N
+def NON_REPEATING_DISCIPLINES(blob: Blob) -> bool:
+    N = len(blob) // f
+    return len(set(DISCIPLINES(blob))) == N
 
 
 def NOCTURNE_CLASSES(conn: Conn, blob: Blob) -> bool:
-    X = DAY_PERIOD_FROM_ALL_CONFIGURATIONS(conn, blob)
+    X = PERIOD_OF_THE_DAY(conn, blob)
     return True if ("n" in X) else False
 
 
-def NOT_ONLY_IN_THE_SAME_PERIOD_OF_THE_DAY(connection, blob):
-    return len(DAY_PERIOD_FROM_ALL_CONFIGURATIONS(connection, blob)) >= 2
+def NOT_IN_A_SINGLE_PERIOD_OF_THE_DAY(conn: Conn, blob: Blob) -> bool:
+    return len(PERIOD_OF_THE_DAY(conn, blob)) >= 2
 
 
-def AT_LEAST_SOME_CLASS_AT_FCT(blob):
-    return 3 in CAMPUSES_FROM_ALL_CONFIGURATIONS(blob)
+def AT_LEAST_SOME_CONFIG_TAKE_EFFECT_AT_FCT(blob: Blob) -> bool:
+    return True if (3 in CAMPUSES(blob)) else False
 
 
-def HEALTH_OF_THE_BLOBS_COLLECTION(connection, blob):
+def HEALTH_OF_THE_BLOBS_COLLECTION(conn: Conn, blob: Blob) -> bool:
     X = NON_REPEATING_DISCIPLINES(blob)
-    Y = NOCTURNE_CLASSES(connection, blob)
-    Z = NOT_ONLY_IN_THE_SAME_PERIOD_OF_THE_DAY(connection, blob)
-    W = AT_LEAST_SOME_CLASS_AT_FCT(blob)
+    Y = NOCTURNE_CLASSES(conn, blob)
+    Z = NOT_IN_A_SINGLE_PERIOD_OF_THE_DAY(conn, blob)
+    W = AT_LEAST_SOME_CONFIG_TAKE_EFFECT_AT_FCT(blob)
+    print(X, Y, Z, W)
     return X and Y and Z and W
 
 
@@ -213,20 +221,21 @@ def main():
                     pkey = PKEY(conn, table, field)
                     score[table][pkey] = toml_file[table][field]
 
-        blob0 = BLOB(conn, int(sys.argv[2]))
+        B0 = BLOB(conn, int(sys.argv[2]))
 
-        if blob0:
-            blob1 = sorted(
-                [B for B in blob0 if OVERLAPPING_CLASSES(conn, B) is False],
-                key=lambda B: RANK(conn, score, B),
-                reverse=True,
-            )
-            with open("sorted.txt", "w") as sorted_results:
-                for b in blob1:
-                    print(
-                        DECODE(conn, b),
-                        file=sorted_results,
-                    )
+        if B0:
+            print(HEALTH_OF_THE_BLOBS_COLLECTION(conn, B0[4096]))
+            # B1 = sorted(
+            #     [B for B in B0 if OVERLAPPING_CLASSES(conn, B) is False],
+            #     key=lambda B: RANK(conn, score, B),
+            #     reverse=True,
+            # )
+            # with open("sorted.txt", "w") as sorted_results:
+            #     for b in B1:
+            #         print(
+            #             DECODE(conn, b),
+            #             file=sorted_results,
+            #         )
 
 
 if __name__ == "__main__":

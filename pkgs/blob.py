@@ -1,9 +1,9 @@
 import re
 import sqlite3
 from datetime import datetime
-from typing import NewType, TypeAlias
+from typing import Tuple, TypeAlias
 
-Blob: TypeAlias = tuple[int]
+Blob: TypeAlias = Tuple[int]
 Conn: TypeAlias = sqlite3.Connection
 
 
