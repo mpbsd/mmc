@@ -1,10 +1,10 @@
 import re
 import sqlite3
 from datetime import datetime
-from typing import NewType
+from typing import NewType, TypeAlias
 
-Blob = NewType("Blob", tuple[int])
-Conn = NewType("Conn", sqlite3.Connection)
+Blob: TypeAlias = tuple[int]
+Conn: TypeAlias = sqlite3.Connection
 
 
 def SEMESTER() -> str:
@@ -18,7 +18,7 @@ def REGEXP(pattern: str, input: str) -> bool:
     return bool(regexp.match(input))
 
 
-def NAME(conn: Conn, table: str, pkey: str) -> str | None:
+def NAME(conn: Conn, table: str, pkey: int) -> str | None:
     name = None
     if table in ["campus", "curso", "disciplina", "horario", "semestre"]:
         query = f"SELECT y FROM '{table}' WHERE x = '{pkey}'"
@@ -31,7 +31,7 @@ def NAME(conn: Conn, table: str, pkey: str) -> str | None:
     return name
 
 
-def PKEY(conn: Conn, table: str, name: str) -> str | None:
+def PKEY(conn: Conn, table: str, name: str) -> int | None:
     pkey = None
     if table in ["campus", "curso", "disciplina", "horario", "semestre"]:
         query = f"SELECT x FROM '{table}' WHERE y = '{name}'"
