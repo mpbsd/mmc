@@ -1,388 +1,45 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 import re
 import sqlite3
 import sys
 import tomllib
-from datetime import datetime
 from itertools import combinations
 from pathlib import Path
 
-
-def SEMESTER():
-    Y = int(datetime.today().strftime("%Y"))
-    M = int(datetime.today().strftime("%m"))
-    return f"{Y}_2" if (M <= 6) else f"{Y+1}_1"
+from pkgs.blob import BLOB, NAME, PKEY, REGEXP, Conn
 
 
-def REGEXP(pattern, input):
-    regexp = re.compile(pattern)
-    return bool(regexp.match(input))
-
-
-def BLOB(connection, profile):
-    pkey_semester = PKEY(connection, "semestre", SEMESTER())
-    RE = {
-        # 4HPW {{{
-        "4HPW": r"^[2-6]{2}[mtn][1-6]{2}$",
-        # }}}
-        # 6HPW {{{
-        "6HPW": r"^[2-6]{3}[mtn][1-6]{2}$",
-        # }}}
-    }
-    QUERY = {
-        # 2BLOBS {{{
-        "2BLOBS": (
-            "SELECT"
-            "  * "
-            "FROM"
-            "  blob AS B1 "
-            "INNER JOIN"
-            "  blob AS B2 "
-            "ON"
-            "("
-            "  ("
-            "    ("
-            "      B1.campus IN (1, 2)"
-            "      AND"
-            "      B2.campus IN (1, 2)"
-            "    )"
-            "    OR"
-            "    ("
-            "      B1.campus = 3"
-            "      AND"
-            "      B2.campus = 3"
-            "    )"
-            "  )"
-            "  AND"
-            "  ("
-            "    B1.horario != B2.horario"
-            "  )"
-            "  AND"
-            "  ("
-            "    B1.semestre = B2.semestre"
-            "    AND"
-            "    B2.semestre = ?"
-            "  )"
-            ")"
-            "WHERE"
-            "("
-            "  EXISTS"
-            "  ("
-            "    SELECT"
-            "      H.x"
-            "    FROM"
-            "      horario AS H"
-            "    WHERE"
-            "      H.x = B1.horario"
-            "      AND"
-            "      H.y REGEXP ?"
-            "  )"
-            "  AND"
-            "  EXISTS"
-            "  ("
-            "    SELECT"
-            "      H.x"
-            "    FROM"
-            "      horario AS H"
-            "    WHERE"
-            "      H.x = B2.horario"
-            "      AND"
-            "      H.y REGEXP ?"
-            "  )"
-            ")"
-            "LIMIT 8192;"
-        ),
-        # }}}
-        # 3BLOBS {{{
-        "3BLOBS": (
-            "SELECT"
-            "  * "
-            "FROM"
-            "  blob AS B1 "
-            "INNER JOIN"
-            "  blob AS B2, blob as B3 "
-            "ON"
-            "("
-            "  ("
-            "    ("
-            "      B1.campus IN (1, 2)"
-            "      AND"
-            "      B2.campus IN (1, 2)"
-            "      AND"
-            "      B3.campus IN (1, 2)"
-            "    )"
-            "    OR"
-            "    ("
-            "      B1.campus = 3"
-            "      AND"
-            "      B2.campus = 3"
-            "      AND"
-            "      B3.campus = 3"
-            "    )"
-            "  )"
-            "  AND"
-            "  ("
-            "    B1.horario != B2.horario"
-            "    AND"
-            "    B1.horario != B3.horario"
-            "    AND"
-            "    B2.horario != B3.horario"
-            "  )"
-            "  AND"
-            "  ("
-            "    B1.semestre = B2.semestre"
-            "    AND"
-            "    B2.semestre = B3.semestre"
-            "    AND"
-            "    B3.semestre = ?"
-            "  )"
-            ")"
-            "WHERE"
-            "("
-            "  EXISTS"
-            "  ("
-            "    SELECT"
-            "      H.x"
-            "    FROM"
-            "      horario AS H"
-            "    WHERE"
-            "      H.x = B1.horario"
-            "      AND"
-            "      H.y REGEXP ?"
-            "  )"
-            "  AND"
-            "  EXISTS"
-            "  ("
-            "    SELECT"
-            "      H.x"
-            "    FROM"
-            "      horario AS H"
-            "    WHERE"
-            "      H.x = B2.horario"
-            "      AND"
-            "      H.y REGEXP ?"
-            "  )"
-            "  AND"
-            "  EXISTS"
-            "  ("
-            "    SELECT"
-            "      H.x"
-            "    FROM"
-            "      horario AS H"
-            "    WHERE"
-            "      H.x = B3.horario"
-            "      AND"
-            "      H.y REGEXP ?"
-            "  )"
-            ")"
-            "LIMIT 8192;"
-        ),
-        # }}}
-        # 4BLOBS {{{
-        "4BLOBS": (
-            "SELECT"
-            "  * "
-            "FROM"
-            "  blob AS B1 "
-            "INNER JOIN"
-            "  blob AS B2, blob as B3, blob as B4 "
-            "ON"
-            "("
-            "  ("
-            "    ("
-            "      B1.campus IN (1, 2)"
-            "      AND"
-            "      B2.campus IN (1, 2)"
-            "      AND"
-            "      B3.campus IN (1, 2)"
-            "      AND"
-            "      B4.campus IN (1, 2)"
-            "    )"
-            "    OR"
-            "    ("
-            "      B1.campus = 3"
-            "      AND"
-            "      B2.campus = 3"
-            "      AND"
-            "      B3.campus = 3"
-            "      AND"
-            "      B4.campus = 3"
-            "    )"
-            "  )"
-            "  AND"
-            "  ("
-            "    B1.horario != B2.horario"
-            "    AND"
-            "    B1.horario != B3.horario"
-            "    AND"
-            "    B1.horario != B4.horario"
-            "    AND"
-            "    B2.horario != B3.horario"
-            "    AND"
-            "    B2.horario != B4.horario"
-            "    AND"
-            "    B3.horario != B4.horario"
-            "  )"
-            "  AND"
-            "  ("
-            "    B1.semestre = B2.semestre"
-            "    AND"
-            "    B2.semestre = B3.semestre"
-            "    AND"
-            "    B3.semestre = B4.semestre"
-            "    AND"
-            "    B4.semestre = ?"
-            "  )"
-            ")"
-            "WHERE"
-            "("
-            "  EXISTS"
-            "  ("
-            "    SELECT"
-            "      H.x"
-            "    FROM"
-            "      horario AS H"
-            "    WHERE"
-            "      H.x = B1.horario"
-            "      AND"
-            "      H.y REGEXP ?"
-            "  )"
-            "  AND"
-            "  EXISTS"
-            "  ("
-            "    SELECT"
-            "      H.x"
-            "    FROM"
-            "      horario AS H"
-            "    WHERE"
-            "      H.x = B2.horario"
-            "      AND"
-            "      H.y REGEXP ?"
-            "  )"
-            "  AND"
-            "  EXISTS"
-            "  ("
-            "    SELECT"
-            "      H.x"
-            "    FROM"
-            "      horario AS H"
-            "    WHERE"
-            "      H.x = B3.horario"
-            "      AND"
-            "      H.y REGEXP ?"
-            "  )"
-            "  AND"
-            "  EXISTS"
-            "  ("
-            "    SELECT"
-            "      H.x"
-            "    FROM"
-            "      horario AS H"
-            "    WHERE"
-            "      H.x = B4.horario"
-            "      AND"
-            "      H.y REGEXP ?"
-            "  )"
-            ")"
-            "LIMIT 8192;"
-        ),
-        # }}}
-    }
-    if profile == 8:
-        # 08HPW {{{
-        blob = connection.execute(
-            QUERY["2BLOBS"], [pkey_semester, RE["4HPW"], RE["4HPW"]]
-        ).fetchall()
-        # }}}
-    elif profile == 10:
-        # 10HPW {{{
-        blob = connection.execute(
-            QUERY["2BLOBS"], [pkey_semester, RE["4HPW"], RE["6HPW"]]
-        ).fetchall()
-        # }}}
-    elif profile == 12:
-        # 12HPW {{{
-        blob_1 = connection.execute(
-            QUERY["3BLOBS"],
-            [pkey_semester, RE["4HPW"], RE["4HPW"], RE["4HPW"]],
-        ).fetchall()
-        blob_2 = connection.execute(
-            QUERY["2BLOBS"], [pkey_semester, RE["6HPW"], RE["6HPW"]]
-        ).fetchall()
-        blob = blob_1 + blob_2
-        # }}}
-    elif profile == 14:
-        # 14HPW {{{
-        blob = connection.execute(
-            QUERY["3BLOBS"],
-            [pkey_semester, RE["4HPW"], RE["4HPW"], RE["6HPW"]],
-        ).fetchall()
-        # }}}
-    elif profile == 16:
-        # 16HPW {{{
-        blob_1 = connection.execute(
-            QUERY["4BLOBS"],
-            [pkey_semester, RE["4HPW"], RE["4HPW"], RE["4HPW"], RE["4HPW"]],
-        ).fetchall()
-        blob_2 = connection.execute(
-            QUERY["3BLOBS"],
-            [pkey_semester, RE["4HPW"], RE["6HPW"], RE["6HPW"]],
-        ).fetchall()
-        blob = blob_1 + blob_2
-        # }}}
+def DIGITS(number: str) -> list[int] | None:
+    RE = re.compile(r"^[0-9]+$")
+    if RE.match(number):
+        LN = sorted([int(x) for x in number])
     else:
-        blob = None
-    return blob
+        LN = None
+    return LN
 
 
-def PKEY(connection, table, name):
-    pkey = None
-    if table in ["campus", "curso", "disciplina", "horario", "semestre"]:
-        query = f"SELECT x FROM '{table}' WHERE y = '{name}'"
-        response = connection.execute(query).fetchone()
-        if response is not None:
-            pkey = response[0]
-    return pkey
+def TIMETABLE_COMPONENTS(conn: Conn, pkey: str) -> tuple | None:
+    RE = re.compile(r"^([2-6]{1,3})([mtn])([1-6]{1,3})$", re.I)
+    TT = NAME(conn, "horario", pkey)
+    C0 = None
+    if TT:
+        C1 = RE.match(TT)
+        if C1:
+            C0 = (DIGITS(C1.group(1)), C1.group(2), DIGITS(C1.group(3)))
+    return C0
 
 
-def NAME(connection, table, pkey):
-    name = None
-    if table in ["campus", "curso", "disciplina", "horario", "semestre"]:
-        query = f"SELECT y FROM '{table}' WHERE x = '{pkey}'"
-        response = connection.execute(query).fetchone()
-        if response is not None:
-            name = response[0]
-    return name
+def HOURS_PER_WEEK(connection: Conn, pkey_tt: str) -> int | None:
+    C = TIMETABLE_COMPONENTS(connection, pkey_tt)
+    if C:
+        H = len(C[0]) * len(C[2])
+    else:
+        H = None
+    return H
 
 
-def DIGITS(number):
-    re_digits = re.compile(r"^[0-9]+$")
-    digits = None
-    if re_digits.match(number):
-        digits = [int(x) for x in number]
-    return digits
-
-
-def COMPONENTS(connection, pkey_timetable):
-    re_timetable = re.compile(r"^([2-6]{1,3})([mtn])([1-6]{1,3})$", re.I)
-    timetable = NAME(connection, "horario", pkey_timetable)
-    components = None
-    if (timetable is not None) and (re_timetable.match(timetable) is not None):
-        CMP = re_timetable.match(timetable).groups()
-        components = (sorted(DIGITS(CMP[0])), CMP[1], sorted(DIGITS(CMP[2])))
-    return components
-
-
-def HOURS_PER_WEEK(connection, pkey_timetable):
-    C = COMPONENTS(connection, pkey_timetable)
-    return len(C[0]) * len(C[1])
-
-
-def OVERLAPPING_CLASSES(connection, blob):
+def OVERLAPPING_CLASSES(connection: Conn, blob: tuple) -> bool:
     N = len(blob) // 5
-    T = [COMPONENTS(connection, blob[i * 5 + 3]) for i in range(N)]
+    T = [TIMETABLE_COMPONENTS(connection, blob[i * 5 + 3]) for i in range(N)]
     B = 1
     for t1, t2 in combinations(T, 2):
         C0 = len([d for d in t1[0] if d in t2[0]]) > 0
@@ -401,7 +58,7 @@ def REPEATING_DISCIPLINES(blob):
 
 def RECURRING_DAYS(connection, blob):
     N = len(blob) // 5
-    T = [COMPONENTS(connection, blob[i * 5 + 3]) for i in range(N)]
+    T = [TIMETABLE_COMPONENTS(connection, blob[i * 5 + 3]) for i in range(N)]
     B = 1
     for t1, t2 in combinations(T, 2):
         if (t1[0] <= t2[0] or t2[0] <= t1[0]) is False:
@@ -411,7 +68,7 @@ def RECURRING_DAYS(connection, blob):
 
 def CONTIGUOUS_CLASSES(connection, blob):
     N = len(blob) // 5
-    T = [COMPONENTS(connection, blob[i * 5 + 3]) for i in range(N)]
+    T = [TIMETABLE_COMPONENTS(connection, blob[i * 5 + 3]) for i in range(N)]
     B = 1
     for t1, t2 in combinations(T, 2):
         C0 = len([d for d in t1[0] if d in t2[0]]) > 0
@@ -455,6 +112,66 @@ def DECODE(connection, blob):
         horario = NAME(connection, "horario", blob[i * 5 + 3])
         semestre = NAME(connection, "semestre", blob[i * 5 + 4])
         X.append((campus, curso, disciplina, horario, semestre))
+    return X
+
+
+def CAMPUSES_FROM_ALL_CONFIGURATIONS(blob):
+    return set([[x[0] for x in X] for X in blob])
+
+
+def DISCIPLINES_FROM_ALL_BLOBS(blob):
+    N = len(blob) // 5
+    return set([blob[i * 5 + 2] for i in range(N)])
+
+
+def DAY_PERIOD_FROM_ALL_CONFIGURATIONS(connection, blob):
+    N = len(blob) // 5
+    return set([TIMETABLE_COMPONENTS(connection, blob[i * 5 + 3])[1] for i in range(N)])
+
+
+def NON_REPEATING_DISCIPLINES(blob):
+    N = len(blob) // 5
+    M = len(set([blob[i * 5 : i * 5 + 5] for i in range(N)]))
+    return M == N
+
+
+def NOCTURNE_CLASSES(connection, blob):
+    X = DAY_PERIOD_FROM_ALL_CONFIGURATIONS(connection, blob)
+    return "n" in X
+
+
+def NOT_ONLY_IN_THE_SAME_PERIOD_OF_THE_DAY(connection, blob):
+    return len(DAY_PERIOD_FROM_ALL_CONFIGURATIONS(connection, blob)) >= 2
+
+
+def AT_LEAST_SOME_CLASS_AT_FCT(blob):
+    return 3 in CAMPUSES_FROM_ALL_CONFIGURATIONS(blob)
+
+
+def HEALTH_OF_THE_BLOBS_COLLECTION(connection, blob):
+    X = NON_REPEATING_DISCIPLINES(blob)
+    Y = NOCTURNE_CLASSES(connection, blob)
+    Z = NOT_ONLY_IN_THE_SAME_PERIOD_OF_THE_DAY(connection, blob)
+    W = AT_LEAST_SOME_CLASS_AT_FCT(blob)
+    return X and Y and Z and W
+
+
+def FIRST_EIGHT_VALID_CONFIGURATIONS(connection, BLOB):
+    X = [BLOB[0]]
+    i = 1
+    j = 1
+    while i < 8:
+        x = DISCIPLINES_FROM_ALL_BLOBS(X)
+        NON_REPEATED_DISCIPLINE = True
+        N = len(BLOB[j]) // 5
+        for y in [BLOB[j][i * 5 : i * 5 + 5] for i in range(N)]:
+            if y in x:
+                NON_REPEATED_DISCIPLINE = False
+                j += 1
+        if NON_REPEATED_DISCIPLINE is True:
+            X.append(BLOB[j])
+            i += 1
+            j += 1
     return X
 
 
