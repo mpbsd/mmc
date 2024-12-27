@@ -2,6 +2,7 @@ import re
 import sqlite3
 import sys
 import tomllib
+from functools import reduce
 from itertools import combinations
 from pathlib import Path
 
@@ -103,9 +104,16 @@ def SCORE(score: dict, tbl: str, key: int) -> int:
     return S
 
 
-# TODO: add extra points for configurations in a single campus, if the campus
-# is either colemar (1) or samambaia (2)
+def CAMPUSES(blob: Blob) -> list[int]:
+    N = len(blob) // f
+    C = []
+    for i in range(N):
+        C.append(blob[i * f + F["campus"]])
+    return C
+
+
 def RANK(conn: Conn, score, blob: Blob) -> float:
+    C = CAMPUSES(blob)
     N = len(blob) // f
     S = 0
     for i in range(N):
@@ -113,6 +121,8 @@ def RANK(conn: Conn, score, blob: Blob) -> float:
         S += SCORE(score, "curso", blob[i * f + F["curso"]])
         S += SCORE(score, "disciplina", blob[i * f + F["disciplina"]])
         S += SCORE(score, "horario", blob[i * f + F["horario"]])
+    S += 1 if (len(set(C)) == 1) else 0
+    S += 1 if (3 not in C) else -1
     S += 1 if REPEATING_DISCIPLINES(blob) else 0
     S += 1 if RECURRING_DAYS(conn, blob) else 0
     S += 1 if CONTIGUOUS_CLASSES(conn, blob) else 0
@@ -132,60 +142,55 @@ def DECODE(conn: Conn, blob: Blob) -> list[tuple[str]]:
     return X
 
 
-def CAMPUSES(blob: Blob) -> list[int]:
-    N = len(blob) // f
-    C = []
-    for i in range(N):
-        c = blob[i * f + F["campus"]]
-        if c not in C:
-            C.append(c)
-    return sorted(C)
-
-
 def DISCIPLINES(blob: Blob) -> list[Blob]:
     N = len(blob) // f
     D = []
     for i in range(N):
-        D.append(blob[i * f + F["campus"] : i * f + F["semestre"]])
+        D.append(blob[i * f + F["curso"] : i * f + F["horario"] + 1])
     return D
 
 
-def PERIOD_OF_THE_DAY(conn: Conn, blob: Blob) -> list[str]:
-    N = len(blob) // f
+def ISVALID(x, C, D) -> bool:
+    Y = (x == 0) and (len(C) < 2) and ("n" not in C) and (3 not in D)
+    return Y
+
+
+# There are four lists, named A, B, C and D
+#
+#  A: for the blobs themselves
+#  B: for the disciplines
+#  C: for the periods of the day
+#  D: for the campuses
+#
+# TODO: add upper bounds to prevent overflows
+def EIGHT_FIRST_VALID_ONES(conn: Conn, BLOB: list[Blob]) -> list[Blob]:
+    A = [BLOB[0]]
+    B = DISCIPLINES(BLOB[0])
+    i = 1
+    while len(A) < 7:
+        x = 0
+        while x == 0:
+            X = list(map(lambda y: 1 if y not in B else 0, DISCIPLINES(BLOB[i])))
+            x = reduce(lambda r, s: r * s, X)
+            i += 1
+        A.append(BLOB[i])
+        for y in DISCIPLINES(BLOB[i]):
+            B.append(y)
+        i += 1
+    C = []
     D = []
-    for i in range(N):
-        TT = TIMETABLE_COMPONENTS(conn, blob[i * f + F["horario"]])
-        if TT:
-            if TT[1] not in D:
-                D.append(TT[1])
-    return D
-
-
-def NON_REPEATING_DISCIPLINES(blob: Blob) -> bool:
-    N = len(blob) // f
-    return len(set(DISCIPLINES(blob))) == N
-
-
-def NOCTURNE_CLASSES(conn: Conn, blob: Blob) -> bool:
-    X = PERIOD_OF_THE_DAY(conn, blob)
-    return True if ("n" in X) else False
-
-
-def NOT_IN_A_SINGLE_PERIOD_OF_THE_DAY(conn: Conn, blob: Blob) -> bool:
-    return len(PERIOD_OF_THE_DAY(conn, blob)) >= 2
-
-
-def AT_LEAST_SOME_CONFIG_TAKE_EFFECT_AT_FCT(blob: Blob) -> bool:
-    return True if (3 in CAMPUSES(blob)) else False
-
-
-def HEALTH_OF_THE_BLOBS_COLLECTION(conn: Conn, blob: Blob) -> bool:
-    X = NON_REPEATING_DISCIPLINES(blob)
-    Y = NOCTURNE_CLASSES(conn, blob)
-    Z = NOT_IN_A_SINGLE_PERIOD_OF_THE_DAY(conn, blob)
-    W = AT_LEAST_SOME_CONFIG_TAKE_EFFECT_AT_FCT(blob)
-    print(X, Y, Z, W)
-    return X and Y and Z and W
+    for j in range(7):
+        N = len(A[j]) // f
+        for k in range(N):
+            T = TIMETABLE_COMPONENTS(conn, A[j][k * f + F["horario"]])
+            if T:
+                if T[1] not in C:
+                    C.append(T[1])
+            if A[j][k * f + F["campus"]] not in D:
+                D.append(A[j][k * f + F["campus"]])
+    print(C, D)
+    # TODO: be smart and go first for the things that matter most ;)
+    return A
 
 
 def main():
@@ -224,7 +229,8 @@ def main():
         B0 = BLOB(conn, int(sys.argv[2]))
 
         if B0:
-            print(HEALTH_OF_THE_BLOBS_COLLECTION(conn, B0[4096]))
+            S = EIGHT_FIRST_VALID_ONES(conn, B0)
+            print(S)
             # B1 = sorted(
             #     [B for B in B0 if OVERLAPPING_CLASSES(conn, B) is False],
             #     key=lambda B: RANK(conn, score, B),
