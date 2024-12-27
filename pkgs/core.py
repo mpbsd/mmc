@@ -2,6 +2,7 @@ import re
 import sqlite3
 import sys
 import tomllib
+from copy import copy
 from functools import reduce
 from itertools import combinations
 from pathlib import Path
@@ -191,11 +192,22 @@ def EIGHT_FIRST_VALID_ONES(conn: Conn, BLOB: list[Blob]) -> list[Blob]:
                     C.append(T[1])
             if A[j][k * f + F["campus"]] not in D:
                 D.append(A[j][k * f + F["campus"]])
-    # _, C2, C3 = HEALTH(x, C, D)
-    # if (C2 == 1) and (C3 == 0):
-    # elif (C2 == 0) and (C3 == 1):
-    # elif (C2 == 1) and (C3 == 1):
+    Y = copy(C)
+    Z = copy(D)
     # TODO: be smart and go first for the things that matter most ;)
+    while reduce(lambda r, s: r * s, HEALTH(x, Y, Z)) == 0:
+        X = list(map(lambda y: 1 if y not in B else 0, DISCIPLINES(BLOB[i])))
+        x = reduce(lambda r, s: r * s, X)
+        N = len(BLOB[i]) // f
+        for j in range(N):
+            T = TIMETABLE_COMPONENTS(conn, BLOB[i][j * f + F["horario"]])
+            if T:
+                if (T[1] not in C) or (T[1] == "n"):
+                    Y.append(T[1])
+            if BLOB[i][j * f + F["campus"]] not in Z:
+                Z.append(BLOB[i][j * f + F["campus"]])
+        i += 1
+    A.append(BLOB[i])
     return A
 
 
@@ -235,20 +247,22 @@ def main():
         B0 = BLOB(conn, int(sys.argv[2]))
 
         if B0:
-            S = EIGHT_FIRST_VALID_ONES(conn, B0)
 
-            print(S)
-            # B1 = sorted(
-            #     [B for B in B0 if OVERLAPPING_CLASSES(conn, B) is False],
-            #     key=lambda B: RANK(conn, score, B),
-            #     reverse=True,
-            # )
-            # with open("sorted.txt", "w") as sorted_results:
-            #     for b in B1:
-            #         print(
-            #             DECODE(conn, b),
-            #             file=sorted_results,
-            #         )
+            B1 = sorted(
+                [B for B in B0 if OVERLAPPING_CLASSES(conn, B) is False],
+                key=lambda B: RANK(conn, score, B),
+                reverse=True,
+            )
+
+            with open("sorted.txt", "w") as results:
+                for b in B1:
+                    print(DECODE(conn, b), file=results)
+
+            B2 = EIGHT_FIRST_VALID_ONES(conn, B1)
+
+            with open("suggestion.txt", "w") as suggestions:
+                for b in B2:
+                    print(DECODE(conn, b), file=suggestions)
 
 
 if __name__ == "__main__":

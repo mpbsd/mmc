@@ -115,7 +115,7 @@ def BLOB(conn: Conn, profile: int) -> list[Blob] | None:
             "      H.y REGEXP ?"
             "  )"
             ")"
-            "LIMIT 8192;"
+            "LIMIT 16384;"
         ),
         # }}}
         # 3BLOBS {{{
@@ -200,7 +200,7 @@ def BLOB(conn: Conn, profile: int) -> list[Blob] | None:
             "      H.y REGEXP ?"
             "  )"
             ")"
-            "LIMIT 8192;"
+            "LIMIT 16384;"
         ),
         # }}}
         # 4BLOBS {{{
@@ -309,7 +309,7 @@ def BLOB(conn: Conn, profile: int) -> list[Blob] | None:
             "      H.y REGEXP ?"
             "  )"
             ")"
-            "LIMIT 8192;"
+            "LIMIT 16384;"
         ),
         # }}}
     }
