@@ -150,9 +150,11 @@ def DISCIPLINES(blob: Blob) -> list[Blob]:
     return D
 
 
-def ISVALID(x, C, D) -> bool:
-    Y = (x == 0) and (len(C) < 2) and ("n" not in C) and (3 not in D)
-    return Y
+def HEALTH(x: int, C: list[str], D: list[int]) -> list[int]:
+    C1 = 1 if (x == 1) else 0
+    C2 = 1 if ((len(C) >= 2) and ("n" in C)) else 0
+    C3 = 1 if (3 in D) else 0
+    return [C1, C2, C3]
 
 
 # There are four lists, named A, B, C and D
@@ -166,6 +168,7 @@ def ISVALID(x, C, D) -> bool:
 def EIGHT_FIRST_VALID_ONES(conn: Conn, BLOB: list[Blob]) -> list[Blob]:
     A = [BLOB[0]]
     B = DISCIPLINES(BLOB[0])
+    x = 0
     i = 1
     while len(A) < 7:
         x = 0
@@ -188,7 +191,10 @@ def EIGHT_FIRST_VALID_ONES(conn: Conn, BLOB: list[Blob]) -> list[Blob]:
                     C.append(T[1])
             if A[j][k * f + F["campus"]] not in D:
                 D.append(A[j][k * f + F["campus"]])
-    print(C, D)
+    # _, C2, C3 = HEALTH(x, C, D)
+    # if (C2 == 1) and (C3 == 0):
+    # elif (C2 == 0) and (C3 == 1):
+    # elif (C2 == 1) and (C3 == 1):
     # TODO: be smart and go first for the things that matter most ;)
     return A
 
@@ -199,19 +205,19 @@ def main():
     conf = "pkgs/conf.toml"
 
     if Path(data).is_file() is False:
-        sys.exit(10)
+        sys.exit(100)
 
     if Path(conf).is_file() is False:
-        sys.exit(11)
+        sys.exit(101)
 
     if len(sys.argv) != 3:
-        sys.exit(12)
+        sys.exit(102)
 
     if sys.argv[1] not in ["-p", "--profile"]:
-        sys.exit(13)
+        sys.exit(103)
 
     if sys.argv[2] not in ["8", "10", "12", "14", "16"]:
-        sys.exit(14)
+        sys.exit(104)
 
     with sqlite3.connect(data) as conn:
         conn.create_function("REGEXP", 2, REGEXP)
@@ -230,6 +236,7 @@ def main():
 
         if B0:
             S = EIGHT_FIRST_VALID_ONES(conn, B0)
+
             print(S)
             # B1 = sorted(
             #     [B for B in B0 if OVERLAPPING_CLASSES(conn, B) is False],
