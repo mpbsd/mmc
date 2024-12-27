@@ -2,7 +2,6 @@ import re
 import sqlite3
 import sys
 import tomllib
-from copy import copy
 from functools import reduce
 from itertools import combinations
 from pathlib import Path
@@ -151,6 +150,16 @@ def DISCIPLINES(blob: Blob) -> list[Blob]:
     return D
 
 
+def ONLY_NOCTURNE_DISCIPLINES(conn: Conn, blob: Blob) -> bool:
+    N = len(blob) // f
+    B = 1
+    for i in range(N):
+        T = TIMETABLE_COMPONENTS(conn, blob[i * f + F["horario"]])
+        if T:
+            B *= 1 if (T[1] == "n") else 0
+    return True if (B > 0) else False
+
+
 def HEALTH(x: int, C: list[str], D: list[int]) -> list[int]:
     C1 = 1 if (x == 1) else 0
     C2 = 1 if ((len(C) >= 2) and ("n" in C)) else 0
@@ -160,18 +169,18 @@ def HEALTH(x: int, C: list[str], D: list[int]) -> list[int]:
 
 # There are four lists, named A, B, C and D
 #
-#  A: for the blobs themselves
-#  B: for the disciplines
-#  C: for the periods of the day
-#  D: for the campuses
+#  A: blobs themselves
+#  B: disciplines
+#  C: periods of the day
+#  D: campuses
 #
 # TODO: add upper bounds to prevent overflows
-def EIGHT_FIRST_VALID_ONES(conn: Conn, BLOB: list[Blob]) -> list[Blob]:
+def EIGHT_FIRST_VALID_CONFIGS(conn: Conn, BLOB: list[Blob]) -> list[Blob]:
     A = [BLOB[0]]
     B = DISCIPLINES(BLOB[0])
     x = 0
     i = 1
-    while len(A) < 7:
+    while len(A) < 6:
         x = 0
         while x == 0:
             X = list(map(lambda y: 1 if y not in B else 0, DISCIPLINES(BLOB[i])))
@@ -183,7 +192,7 @@ def EIGHT_FIRST_VALID_ONES(conn: Conn, BLOB: list[Blob]) -> list[Blob]:
         i += 1
     C = []
     D = []
-    for j in range(7):
+    for j in range(6):
         N = len(A[j]) // f
         for k in range(N):
             T = TIMETABLE_COMPONENTS(conn, A[j][k * f + F["horario"]])
@@ -192,22 +201,20 @@ def EIGHT_FIRST_VALID_ONES(conn: Conn, BLOB: list[Blob]) -> list[Blob]:
                     C.append(T[1])
             if A[j][k * f + F["campus"]] not in D:
                 D.append(A[j][k * f + F["campus"]])
-    Y = copy(C)
-    Z = copy(D)
-    # TODO: be smart and go first for the things that matter most ;)
-    while reduce(lambda r, s: r * s, HEALTH(x, Y, Z)) == 0:
-        X = list(map(lambda y: 1 if y not in B else 0, DISCIPLINES(BLOB[i])))
-        x = reduce(lambda r, s: r * s, X)
-        N = len(BLOB[i]) // f
-        for j in range(N):
-            T = TIMETABLE_COMPONENTS(conn, BLOB[i][j * f + F["horario"]])
-            if T:
-                if (T[1] not in C) or (T[1] == "n"):
-                    Y.append(T[1])
-            if BLOB[i][j * f + F["campus"]] not in Z:
-                Z.append(BLOB[i][j * f + F["campus"]])
+    if (len(C) < 2) or ("n" not in C):
+        CHOP_BLOB = [x for x in BLOB if ONLY_NOCTURNE_DISCIPLINES(conn, x) is True]
+        x = 0
+        i = 0
+        while x == 0:
+            X = list(map(lambda y: 1 if y not in B else 0, DISCIPLINES(CHOP_BLOB[i])))
+            x = reduce(lambda r, s: r * s, X)
+            i += 1
+        A.append(CHOP_BLOB[i])
+        for y in DISCIPLINES(CHOP_BLOB[i]):
+            B.append(y)
         i += 1
-    A.append(BLOB[i])
+    CHOP_BLOB = [x for x in BLOB if x[0] == 3]
+    A.append(CHOP_BLOB[0])
     return A
 
 
@@ -258,7 +265,7 @@ def main():
                 for b in B1:
                     print(DECODE(conn, b), file=results)
 
-            B2 = EIGHT_FIRST_VALID_ONES(conn, B1)
+            B2 = EIGHT_FIRST_VALID_CONFIGS(conn, B1)
 
             with open("suggestion.txt", "w") as suggestions:
                 for b in B2:
