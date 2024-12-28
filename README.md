@@ -38,4 +38,6 @@ comuns**.
 
 ## Afazeres
 
+- Existem alguns casos fronteiriços a serem resolvidos; quanto maior a carga
+  horaria semanal, maior é a quantidade de combinações possíveis.
 - Criar interface TUI (Text User Interface);

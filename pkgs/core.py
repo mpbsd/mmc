@@ -150,13 +150,22 @@ def DISCIPLINES(blob: Blob) -> list[Blob]:
     return D
 
 
-def ONLY_NOCTURNE_DISCIPLINES(conn: Conn, blob: Blob) -> bool:
+def AT_LEAST_ONE_NOCTURNE_DISCIPLINE(conn: Conn, blob: Blob) -> bool:
     N = len(blob) // f
-    B = 1
+    B = 0
     for i in range(N):
         T = TIMETABLE_COMPONENTS(conn, blob[i * f + F["horario"]])
         if T:
-            B *= 1 if (T[1] == "n") else 0
+            B += 1 if (T[1] == "n") else 0
+    return True if (B > 0) else False
+
+
+def AT_LEAST_ONE_DISCIPLINE_AT_FCT(blob: Blob) -> bool:
+    N = len(blob) // f
+    B = 0
+    for i in range(N):
+        if blob[i * f + F["campus"]] == 3:
+            B += 1
     return True if (B > 0) else False
 
 
@@ -201,20 +210,21 @@ def EIGHT_FIRST_VALID_CONFIGS(conn: Conn, BLOB: list[Blob]) -> list[Blob]:
                     C.append(T[1])
             if A[j][k * f + F["campus"]] not in D:
                 D.append(A[j][k * f + F["campus"]])
-    if (len(C) < 2) or ("n" not in C):
-        CHOP_BLOB = [x for x in BLOB if ONLY_NOCTURNE_DISCIPLINES(conn, x) is True]
-        x = 0
-        i = 0
-        while x == 0:
-            X = list(map(lambda y: 1 if y not in B else 0, DISCIPLINES(CHOP_BLOB[i])))
-            x = reduce(lambda r, s: r * s, X)
-            i += 1
-        A.append(CHOP_BLOB[i])
-        for y in DISCIPLINES(CHOP_BLOB[i]):
-            B.append(y)
+    # nocturne configuration
+    CHOP_BLOB = [x for x in BLOB if AT_LEAST_ONE_NOCTURNE_DISCIPLINE(conn, x) is True]
+    x = 0
+    i = 0
+    while x == 0:
+        X = list(map(lambda y: 1 if y not in B else 0, DISCIPLINES(CHOP_BLOB[i])))
+        x = reduce(lambda r, s: r * s, X)
         i += 1
-    CHOP_BLOB = [x for x in BLOB if x[0] == 3]
-    A.append(CHOP_BLOB[0])
+    A.append(CHOP_BLOB[i])
+    for y in DISCIPLINES(CHOP_BLOB[i]):
+        B.append(y)
+    i += 1
+    CHOP_BLOB = [x for x in BLOB if AT_LEAST_ONE_DISCIPLINE_AT_FCT(x) is True]
+    if CHOP_BLOB:
+        A.append(CHOP_BLOB[0])
     return A
 
 
