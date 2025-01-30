@@ -233,26 +233,23 @@ def main():
     data = "data/sqlite.db"
     conf = "pkgs/conf.toml"
 
+    p_flag = ["-p", "--profile"]
+    p_opts = ["8", "10", "12", "14", "16"]
+    s_flag = ["-s", "--semester"]
+    s_opts = ["2025_1"]
+
     if Path(data).is_file() is False:
         sys.exit(100)
 
     if Path(conf).is_file() is False:
         sys.exit(101)
 
-    if len(sys.argv) != 3:
+    if (len(sys.argv) in [3, 5]) is False:
         sys.exit(102)
-
-    if sys.argv[1] not in ["-p", "--profile"]:
-        sys.exit(103)
-
-    if sys.argv[2] not in ["8", "10", "12", "14", "16"]:
-        sys.exit(104)
 
     with sqlite3.connect(data) as conn:
         conn.create_function("REGEXP", 2, REGEXP)
-
         score = {}
-
         with open(conf, "rb") as raw_toml_file:
             toml_file = tomllib.load(raw_toml_file)
             for table in toml_file.keys():
@@ -261,9 +258,39 @@ def main():
                     pkey = PKEY(conn, table, field)
                     score[table][pkey] = toml_file[table][field]
 
-        B0 = BLOB(conn, int(sys.argv[2]))
+    # TODO:
+    # consult the database to see whether it contains information regarding the
+    # informed semester
+    B0 = None
 
-        if B0:
+    if len(sys.argv) == 3:
+        if ((sys.argv[1] in p_flag) and (sys.argv[2] in p_opts)) is False:
+            sys.exit(103)
+        else:
+            B0 = BLOB(conn, int(sys.argv[2]))
+
+    if len(sys.argv) == 5:
+        C0 = (
+            (sys.argv[1] in p_flag)
+            and (sys.argv[2] in p_opts)
+            and (sys.argv[3] in s_flag)
+            and (sys.argv[4] in s_opts)
+        )
+        C1 = (
+            (sys.argv[1] in s_flag)
+            and (sys.argv[2] in s_opts)
+            and (sys.argv[3] in p_flag)
+            and (sys.argv[4] in p_opts)
+        )
+        if (C0 or C1) is False:
+            sys.exit(104)
+        else:
+            if C0 is True:
+                B0 = BLOB(conn, int(sys.argv[2]), sys.argv[4])
+            if C1 is True:
+                B0 = BLOB(conn, int(sys.argv[4]), sys.argv[2])
+
+        if B0 is not None:
 
             B1 = sorted(
                 [B for B in B0 if OVERLAPPING_CLASSES(conn, B) is False],

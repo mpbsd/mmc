@@ -1,0 +1,106 @@
+aparecida ; engenharia de materiais  ; calculo 1a                             ; 246t12
+aparecida ; engenharia de materiais  ; calculo 1a                             ; 246t34
+aparecida ; engenharia de materiais  ; calculo 2a                             ; 246t34
+aparecida ; engenharia de materiais  ; calculo 3a                             ; 24m45
+aparecida ; engenharia de materiais  ; geometria analitica                    ; 24m23
+aparecida ; engenharia de materiais  ; geometria analitica                    ; 24m45
+aparecida ; engenharia de materiais  ; probabilidade e estatistica a          ; 24m23
+aparecida ; engenharia de materiais  ; probabilidade e estatistica a          ; 24m45
+aparecida ; engenharia de producao   ; calculo 3b                             ; 24t12
+colemar   ; engenharia ambiental     ; calculo 1a                             ; 246t34
+colemar   ; engenharia ambiental     ; edo                                    ; 24m56
+colemar   ; engenharia ambiental     ; probabilidade e estatistica a          ; 46m34
+colemar   ; engenharia civil         ; algebra linear                         ; 24m34
+colemar   ; engenharia civil         ; calculo 1a                             ; 246t12
+colemar   ; engenharia civil         ; calculo 2a                             ; 246m12
+colemar   ; engenharia civil         ; calculo 3a                             ; 24t56
+colemar   ; engenharia civil         ; calculo numerico                       ; 35t12
+colemar   ; engenharia civil         ; edo                                    ; 24m12
+colemar   ; engenharia civil         ; geometria analitica                    ; 46t34
+colemar   ; engenharia civil         ; probabilidade e estatistica a          ; 46m56
+colemar   ; engenharia de computacao ; algebra linear                         ; 46t56
+colemar   ; engenharia de computacao ; calculo 1a                             ; 246m34
+colemar   ; engenharia de computacao ; calculo 2a                             ; 246t34
+colemar   ; engenharia de computacao ; calculo 3a                             ; 24m34
+colemar   ; engenharia de computacao ; calculo numerico                       ; 35n45
+colemar   ; engenharia de computacao ; edo                                    ; 24m56
+colemar   ; engenharia de computacao ; matematicadiscreta                     ; 35m56
+colemar   ; engenharia de computacao ; probabilidade e estatistica a          ; 46m12
+colemar   ; engenharia eletrica      ; algebra linear                         ; 35t12
+colemar   ; engenharia eletrica      ; calculo 1a                             ; 246m12
+colemar   ; engenharia eletrica      ; calculo 2a                             ; 246t12
+colemar   ; engenharia eletrica      ; calculo 3                              ; 24m12
+colemar   ; engenharia eletrica      ; calculo numerico                       ; 35m34
+colemar   ; engenharia eletrica      ; edo                                    ; 24m34
+colemar   ; engenharia eletrica      ; geometria analitica                    ; 35m12
+colemar   ; engenharia eletrica      ; probabilidade e estatistica a          ; 46t34
+colemar   ; farmacia                 ; bioestatistica                         ; 46t23
+colemar   ; medicina                 ; bioestatistica 1                       ; 46t12
+colemar   ; nutricao                 ; bioestatistica                         ; 6m123
+colemar   ; psicologia               ; estatistica aplicada a psicologia      ; 35n23
+samambaia ; administracao            ; calculo 1b                             ; 35n45
+samambaia ; administracao            ; calculo 2b                             ; 35n23
+samambaia ; administracao            ; estatistica descritiva e probabilidade ; 46n23
+samambaia ; administracao            ; estatistica inferencial                ; 46n45
+samambaia ; agronomia                ; calculo 1b                             ; 25t23
+samambaia ; agronomia                ; calculo 1b                             ; 25t45
+samambaia ; agronomia                ; calculo 2b                             ; 46t23
+samambaia ; agronomia                ; calculo 2b                             ; 46t45
+samambaia ; arquitetura              ; calculo 1c                             ; 35t23
+samambaia ; biomedicina              ; calculo 1c                             ; 35t45
+samambaia ; biotecnologia            ; calculo 1c                             ; 46t45
+samambaia ; ciencia da computacao    ; algebra linear                         ; 24m45
+samambaia ; ciencia da computacao    ; calculo 1a                             ; 246m45
+samambaia ; ciencia da computacao    ; calculo 2a                             ; 246m45
+samambaia ; ciencia da computacao    ; calculo numerico                       ; 24m45
+samambaia ; ciencia da computacao    ; edo                                    ; 24m45
+samambaia ; ciencia da computacao    ; geometria analitica                    ; 35m45
+samambaia ; ciencia da computacao    ; probabilidade e estatistica a          ; 24m23
+samambaia ; ciencias ambientais      ; calculo 1c                             ; 46t23
+samambaia ; ciencias biologicas      ; calculo 1c                             ; 24t45
+samambaia ; ciencias contabeis       ; estatistica                            ; 46m45
+samambaia ; ciencias contabeis       ; estatistica                            ; 46n45
+samambaia ; ciencias economicas      ; algebra linear                         ; 24m23
+samambaia ; ciencias economicas      ; algebra linear                         ; 24n45
+samambaia ; ciencias economicas      ; calculo 1b                             ; 35n23
+samambaia ; ciencias economicas      ; calculo 1b                             ; 46m23
+samambaia ; comunicacao social       ; estatistica                            ; 46m45
+samambaia ; engenharia de alimentos  ; calculo 1a                             ; 246m23
+samambaia ; engenharia de alimentos  ; calculo 3a                             ; 35t45
+samambaia ; engenharia de alimentos  ; edo                                    ; 35t23
+samambaia ; engenharia de alimentos  ; geometria analitica                    ; 46m45
+samambaia ; engenharia de materiais  ; calculo numerico                       ; 35m45
+samambaia ; engenharia de materiais  ; geometria analitica                    ; 35t34
+samambaia ; engenharia florestal     ; calculo 1b                             ; 46m45
+samambaia ; engenharia mecanica      ; calculo 1a                             ; 246t34
+samambaia ; engenharia mecanica      ; calculo 3a                             ; 24t34
+samambaia ; engenharia mecanica      ; edo                                    ; 24t56
+samambaia ; engenharia mecanica      ; geometria analitica                    ; 35t12
+samambaia ; engenharia quimica       ; calculo 1a                             ; 246m23
+samambaia ; engenharia quimica       ; calculo 3a                             ; 35t23
+samambaia ; engenharia quimica       ; calculo numerico                       ; 24m23
+samambaia ; engenharia quimica       ; edo                                    ; 24m23
+samambaia ; engenharia quimica       ; geometria analitica                    ; 35m23
+samambaia ; farmacia                 ; calculo 1c                             ; 46m45
+samambaia ; gestao da informacao     ; estatistica ii                         ; 246m23
+samambaia ; instituto de fisica      ; calculo 1a                             ; 246m23
+samambaia ; instituto de fisica      ; calculo 1a                             ; 246m45
+samambaia ; instituto de fisica      ; calculo 2a                             ; 246n23
+samambaia ; instituto de fisica      ; calculo 3a                             ; 24t12
+samambaia ; instituto de fisica      ; calculo numerico                       ; 35t56
+samambaia ; instituto de fisica      ; edo                                    ; 24t34
+samambaia ; instituto de fisica      ; geometria analitica                    ; 35n45
+samambaia ; instituto de fisica      ; geometria analitica                    ; 46m45
+samambaia ; instituto de fisica      ; probabilidade e estatistica a          ; 24t56
+samambaia ; inteligencia artificial  ; probabilidade e estatistica a          ; 24m45
+samambaia ; quimica bacharelado      ; algebra linear                         ; 46m45
+samambaia ; quimica bacharelado      ; calculo 1a                             ; 246m23
+samambaia ; quimica bacharelado      ; calculo 2a                             ; 246m23
+samambaia ; quimica bacharelado      ; estatistica                            ; 35m23
+samambaia ; quimica licenciatura     ; calculo 1b                             ; 35n45
+samambaia ; quimica licenciatura     ; calculo 1b                             ; 46m23
+samambaia ; quimica licenciatura     ; calculo 2b                             ; 46m23
+samambaia ; relacoes internacionais  ; probabilidade e estatistica            ; 24m23
+samambaia ; relacoes publicas        ; introducao a estatistica               ; 46m23
+samambaia ; sistemas de informacao   ; calculo 1a                             ; 246n45
+samambaia ; zootecnia                ; calculo 1c                             ; 24t23

@@ -46,12 +46,12 @@ CREATE TABLE IF NOT EXISTS blob(
 .mode csv
 .separator ;
 
-.import csv/campus.csv campus
-.import csv/curso.csv curso
-.import csv/disciplina.csv disciplina
-.import csv/horario.csv horario
-.import csv/semestre.csv semestre
-.import csv/blob.csv blob
+.import data/csv/campus.csv campus
+.import data/csv/curso.csv curso
+.import data/csv/disciplina.csv disciplina
+.import data/csv/horario.csv horario
+.import data/csv/semestre.csv semestre
+.import data/csv/blob.csv blob
 
 .mode table
 

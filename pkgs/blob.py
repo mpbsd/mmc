@@ -7,10 +7,19 @@ Blob: TypeAlias = Tuple[int]
 Conn: TypeAlias = sqlite3.Connection
 
 
-def SEMESTER() -> str:
+def DEFAULT_SEMESTER() -> str:
     Y = int(datetime.today().strftime("%Y"))
     M = int(datetime.today().strftime("%m"))
     return f"{Y}_2" if (M <= 6) else f"{Y+1}_1"
+
+
+def SEMESTER(semester: str = DEFAULT_SEMESTER()) -> str:
+    RE = re.compile(r"^20(2[5-9]|[3-9][0-9])_[12]$")
+    if RE.match(semester):
+        S = semester
+    else:
+        S = DEFAULT_SEMESTER()
+    return S
 
 
 def REGEXP(pattern: str, input: str) -> bool:
@@ -44,8 +53,8 @@ def PKEY(conn: Conn, table: str, name: str) -> int | None:
     return pkey
 
 
-def BLOB(conn: Conn, profile: int) -> list[Blob] | None:
-    pkey_semester = PKEY(conn, "semestre", SEMESTER())
+def BLOB(conn: Conn, profile: int, semester=DEFAULT_SEMESTER()) -> list[Blob] | None:
+    pkey_semester = PKEY(conn, "semestre", SEMESTER(semester))
     RE = {
         # 4HPW {{{
         "4HPW": r"^[2-6]{2}[mtn][1-6]{2}$",
