@@ -146,11 +146,11 @@ def DISCIPLINES(blob: Blob) -> list[Blob]:
     N = len(blob) // f
     D = []
     for i in range(N):
-        D.append(blob[i * f + F["curso"] : i * f + F["horario"] + 1])
+        D.append(blob[i * f + F["campus"] : i * f + F["semestre"] + 1])
     return D
 
 
-def AT_LEAST_ONE_NOCTURNE_DISCIPLINE(conn: Conn, blob: Blob) -> bool:
+def AT_LEAST_ONE_NOCTURNE_DSCPLN(conn: Conn, blob: Blob) -> bool:
     N = len(blob) // f
     B = 0
     for i in range(N):
@@ -160,7 +160,7 @@ def AT_LEAST_ONE_NOCTURNE_DISCIPLINE(conn: Conn, blob: Blob) -> bool:
     return True if (B > 0) else False
 
 
-def AT_LEAST_ONE_DISCIPLINE_AT_FCT(blob: Blob) -> bool:
+def AT_LEAST_ONE_DSCPLN_AT_FCT(blob: Blob) -> bool:
     N = len(blob) // f
     B = 0
     for i in range(N):
@@ -187,21 +187,21 @@ def HEALTH(x: int, C: list[str], D: list[int]) -> list[int]:
 def EIGHT_FIRST_VALID_CONFIGS(conn: Conn, BLOB: list[Blob]) -> list[Blob]:
     A = [BLOB[0]]
     B = DISCIPLINES(BLOB[0])
+    Q = 6
     x = 0
     i = 1
-    while len(A) < 6:
+    while len(A) < Q:
         x = 0
         while x == 0:
-            X = list(map(lambda y: 1 if y not in B else 0, DISCIPLINES(BLOB[i])))
+            X = list(map(lambda y: 0 if y in B else 1, DISCIPLINES(BLOB[i])))
             x = reduce(lambda r, s: r * s, X)
             i += 1
         A.append(BLOB[i])
-        for y in DISCIPLINES(BLOB[i]):
-            B.append(y)
+        B += DISCIPLINES(BLOB[i])
         i += 1
     C = []
     D = []
-    for j in range(6):
+    for j in range(Q):
         N = len(A[j]) // f
         for k in range(N):
             T = TIMETABLE_COMPONENTS(conn, A[j][k * f + F["horario"]])
@@ -210,21 +210,19 @@ def EIGHT_FIRST_VALID_CONFIGS(conn: Conn, BLOB: list[Blob]) -> list[Blob]:
                     C.append(T[1])
             if A[j][k * f + F["campus"]] not in D:
                 D.append(A[j][k * f + F["campus"]])
-    # nocturne configuration
-    CHOP_BLOB = [x for x in BLOB if AT_LEAST_ONE_NOCTURNE_DISCIPLINE(conn, x) is True]
+    CHOP = [x for x in BLOB if AT_LEAST_ONE_NOCTURNE_DSCPLN(conn, x) is True]
     x = 0
     i = 0
     while x == 0:
-        X = list(map(lambda y: 1 if y not in B else 0, DISCIPLINES(CHOP_BLOB[i])))
+        X = list(map(lambda y: 0 if y in B else 1, DISCIPLINES(CHOP[i])))
         x = reduce(lambda r, s: r * s, X)
         i += 1
-    A.append(CHOP_BLOB[i])
-    for y in DISCIPLINES(CHOP_BLOB[i]):
-        B.append(y)
+    A.append(CHOP[i])
+    B += DISCIPLINES(CHOP[i])
     i += 1
-    CHOP_BLOB = [x for x in BLOB if AT_LEAST_ONE_DISCIPLINE_AT_FCT(x) is True]
-    if CHOP_BLOB:
-        A.append(CHOP_BLOB[0])
+    CHOP = [x for x in BLOB if AT_LEAST_ONE_DSCPLN_AT_FCT(x) is True]
+    if CHOP:
+        A.append(CHOP[0])
     return A
 
 
